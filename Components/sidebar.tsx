@@ -2,6 +2,7 @@
 
 import { BadgeCheck, Check, ChevronRight, CircleQuestionMark, CircleStar, Gift, House, Paintbrush, Podium, Trophy, Users, Wallet } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Pages = 'home' | 'tournaments' | 'teams' | 'leaderboard' | 'wallet' | 'Support' | 'Rewards'
 
@@ -22,13 +23,22 @@ export default function Sidebar() {
         <div className="border-r-2 p-5 border-[#2A2B2D] min-w-[15%] flex flex-col place-content-between">
             <div className="flex flex-col">
                 {/* Logo */}
-                <div className="flex items-center gap-2">
-                    <div className="flex w-12 h-auto">
-                        <img src="/logo.png" alt="logo" />
-                    </div>
-                    <div className="flex">
-                        <span className="text-2xl font-semibold">Open</span>
-                        <span className="text-2xl font-semibold text-[#5B4BFF]">Arena</span>
+                <div className="flex items-center gap-3">
+                    <Image
+                        src="/logo.png"
+                        width={46}
+                        height={46}
+                        alt=""
+                    />
+
+                    <div>
+                        <h2 className="font-bold tracking-wide">
+                            OPEN ARENA
+                        </h2>
+
+                        <p className="text-xs tracking-[0.35em] text-violet-500">
+                            TOURNAMENTS
+                        </p>
                     </div>
                 </div>
 
