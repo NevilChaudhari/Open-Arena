@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, ChevronRight, CircleQuestionMark, CircleStar, Gift, House, Paintbrush, Podium, Trophy, Users, Wallet } from "lucide-react";
+import { BadgeCheck, Check, ChevronRight, CircleQuestionMark, CircleStar, Gift, House, Paintbrush, Podium, Trophy, Users, Wallet } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 type Pages = 'home' | 'tournaments' | 'teams' | 'leaderboard' | 'wallet' | 'Support' | 'Rewards'
@@ -42,22 +42,31 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            <div onClick={()=>router.push('/profile')} className="flex items-center cursor-pointer hover:bg-[#1C1D23] gap-3 bg-[#16161C] w-full h-auto rounded-md border border-[#3F3E41] p-3">
-                {/* Profile Image */}
-                <div className="flex items-center justify-center w-13 h-13 rounded-full overflow-hidden">
-                    <img src="/profile.jpg" alt="Profile" className="object-cover w-full h-full" />
-                </div>
-
-                {/* Username */}
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xl font-semibold">Username</span>
-                        <div className="flex items-center justify-center w-4 h-4 rounded-full bg-[#452FBC]"><Check size={12} /></div>
+            <div onClick={() => router.push('/profile')} className="flex flex-col cursor-pointer hover:bg-[#1C1D23] gap-5 bg-[#16161C]/70 w-full h-auto rounded-md border border-[#3F3E41] p-3">
+                {/* Profile */}
+                <div className="items-center gap-3 flex">
+                    {/* Profile Image */}
+                    <div className="flex items-center justify-center w-13 h-13 rounded-full overflow-hidden">
+                        <img src="/profile.jpg" alt="Profile" className="object-cover w-full h-full" />
                     </div>
-                    <span className="text-sm text-[#9A9AA3]">Team Name</span>
+
+                    {/* Username */}
+                    <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                            <span className="text-xl font-semibold">Username</span>
+                            <div className="flex items-center justify-center text-[#A79FFF]"><BadgeCheck size={20} /></div>
+                        </div>
+                        <span className="text-sm text-[#9A9AA3]">Team Name</span>
+                    </div>
+
+                    <div className="flex"><ChevronRight /></div>
                 </div>
 
-                <div className="flex"><ChevronRight /></div>
+                {/* Balance */}
+                <div className="flex flex-col rounded-md p-3 border border-[#3F3E41]">
+                    <span className="text-xs text-[#7E8190]">Total Balance</span>
+                    <span className="text-xl font-semibold">₹99,999.99</span>
+                </div>
             </div>
         </div>
     )

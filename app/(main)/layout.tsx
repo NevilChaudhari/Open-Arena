@@ -1,4 +1,5 @@
 import Sidebar from "@/Components/sidebar";
+import { Bell, Mail, Search } from "lucide-react";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (

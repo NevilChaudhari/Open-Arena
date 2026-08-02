@@ -1,7 +1,7 @@
 import WIP from "@/Components/WIP";
 
-export default function Home() {
+export default function tournament() {
     return (
         <WIP />
-    );
+    )
 }

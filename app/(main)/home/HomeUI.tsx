@@ -4,13 +4,14 @@ import TournamentCard from "@/Components/tournamentCard";
 import { Bell, ChevronRight, Mail, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import WIP from "@/Components/WIP";
 
 export default function HomeUI() {
     const router = useRouter();
     return (
         <div className="flex w-full h-full overflow-hidden">
             {/* Left Part */}
-            <div className="flex flex-col p-5 gap-10 w-full overflow-y-auto overflow-x-hidden">
+            <div className="flex flex-col p-5 gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
                 {/* Navbar */}
                 <div className="flex w-full place-content-between items-center">
                     {/* Searchbox */}
@@ -27,15 +28,15 @@ export default function HomeUI() {
                 </div>
 
                 {/* Slider */}
-                <div className="flex border-2 border-[#2A2B2D] min-h-80 rounded-md items-center justify-center" >Slider</div>
+                <div className="flex border-2 border-[#2A2B2D] min-h-80 rounded-md items-center justify-center" ><WIP /></div>
 
                 {/* Live Tournaments */}
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center place-content-between">
                         <span className="font-semibold text-xl">Live Now</span>
-                        <span onClick={() => router.push('/tournaments')} className="text-[#5B4BFF] text-sm hover:underline cursor-pointer">View All</span>
+                        <span onClick={() => router.push('/tournaments')} className="text-[#A79FFF] text-sm hover:underline cursor-pointer">View All</span>
                     </div>
-                    <div className="flex gap-5 overflow-x-auto scrollbar-none pb-2">
+                    <div className="flex gap-5 overflow-x-auto pb-2">
                         {/* Card */}
                         <TournamentCard image="/BGMI.jpg" perKill={9} currentPlayers={10} totalPlayers={99} />
                         <TournamentCard image="/FF.jpg" perKill={10} currentPlayers={30} totalPlayers={99} />
@@ -48,7 +49,7 @@ export default function HomeUI() {
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center place-content-between">
                         <span className="font-semibold text-xl">Upcoming Tournaments</span>
-                        <span onClick={() => router.push('/tournaments')} className="text-[#5B4BFF] text-sm hover:underline cursor-pointer">View All</span>
+                        <span onClick={() => router.push('/tournaments')} className="text-[#A79FFF] text-sm hover:underline cursor-pointer">View All</span>
                     </div>
 
                     <div className="rounded-xl border border-[#343539] bg-[#171819] min-h-max max-h-100 overflow-x-auto">
@@ -118,7 +119,7 @@ export default function HomeUI() {
                                     </td>
 
                                     {/* Action */}
-                                    <td className="px-5 py-4">
+                                    <td onClick={()=>router.push('/tournaments/tournamentName')} className="px-5 py-4">
                                         <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
                                             <ChevronRight size={18} />
                                         </div>
@@ -131,7 +132,7 @@ export default function HomeUI() {
             </div>
 
             {/* Right Part */}
-            <div className="w-[30%] h-full shrink-0 border-l border-[#2A2B2D] p-5 overflow-hidden">W.I.P</div>
+            <div className="w-[30%] h-full shrink-0 border-l border-[#2A2B2D] p-5 overflow-hidden"><WIP /></div>
         </div>
     );
 }
