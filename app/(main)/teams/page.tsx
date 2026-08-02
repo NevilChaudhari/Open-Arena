@@ -1,7 +1,7 @@
-import HomeUI from "./HomeUI";
+import WIP from "@/Components/WIP";
 
 export default function Home() {
     return (
-        <HomeUI />
+        <WIP />
     );
 }
