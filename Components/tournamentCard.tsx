@@ -1,9 +1,10 @@
+import Image from "next/image";
 import { Radio } from "lucide-react";
 
 export default function TournamentCard({ image, perKill, currentPlayers, totalPlayers }: { image: string, perKill:number, currentPlayers: number, totalPlayers: number }) {
     return (
-        <div className="flex flex-col rounded-md border-2 border-[#2A2B2D] bg-[#171819] hover:bg-[#1D1E20] overflow-hidden group">
-            <div className="flex w-70 h-auto overflow-hidden">
+        <div className="flex flex-col min-w-70 rounded-md border-2 border-[#2A2B2D] bg-[#101112] hover:bg-[#1D1E20] overflow-hidden group">
+            <div className="flex w-70 h-40 overflow-hidden">
                 <img src={image} alt="BGMI" className="w-full h-full object-cover transition-transform duration-100 ease-in-out group-hover:scale-120" />
             </div>
             <div className="flex flex-col p-4 gap-3">
@@ -23,7 +24,7 @@ export default function TournamentCard({ image, perKill, currentPlayers, totalPl
                     </div>
                 </div>
 
-                <div className="flex h-2 rounded-full bg-[#303136]">
+                <div className="flex h-1 rounded-full bg-[#303136]">
                     <div className="flex h-full rounded-full bg-[#5B4BFF]" style={{ width: `${(currentPlayers / totalPlayers) * 100}%` }} />
                 </div>
 

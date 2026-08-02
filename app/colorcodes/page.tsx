@@ -17,113 +17,88 @@ import { useRouter } from "next/navigation";
 
 type ColorCategory = Record<string, string>;
 
-const colors: Record<string, ColorCategory> = {
+const colors = {
     Background: {
-        "--bg-primary": "#080909",
-        "--bg-secondary": "#101112",
-        "--bg-tertiary": "#151617",
-        "--bg-card": "#171819",
-        "--bg-card-hover": "#1D1E20",
-        "--bg-overlay": "rgba(8, 9, 9, 0.8)",
-        "--bg-elevated": "#242527",
+        "--bg": "#040507",
+        "--bg-secondary": "#0A0C0F",
+        "--bg-card": "#16161C",
+        "--bg-elevated": "#1C1D23",
+        "--bg-overlay": "rgba(4, 5, 7, 0.8)",
     },
 
-    Borders: {
-        "--border-primary": "#2A2B2D",
-        "--border-secondary": "#343539",
-        "--border-hover": "#4A4C50",
-        "--border-focus": "#5B4BFF",
-        "--border-disabled": "#242527",
+    Border: {
+        "--border": "#2C292A",
+        "--border-light": "#3F3E41",
+        "--border-focus": "#6B58D6",
+        "--divider": "#202126",
     },
 
-    "Purple Accent": {
-        "--primary": "#5B4BFF",
-        "--primary-light": "#7D70FF",
-        "--primary-lighter": "#A79FFF",
-        "--primary-hover": "#6D5FFF",
-        "--primary-active": "#5141F2",
-        "--primary-dark": "#3D2CC7",
-        "--primary-disabled": "#5B4BFF66",
+    Primary: {
+        "--primary": "#6B58D6",
+        "--primary-hover": "#7A68E8",
+        "--primary-active": "#452FBC",
+        "--primary-light": "#A79FFF",
     },
 
     Text: {
-        "--text-primary": "#FFFFFF",
-        "--text-secondary": "#B6B8C0",
-        "--text-muted": "#7E8190",
-        "--text-disabled": "#5E6067",
-        "--text-inverse": "#080909",
-        "--text-link": "#7D70FF",
-        "--text-link-hover": "#A79FFF",
+        "--text": "#FFFFFF",
+        "--text-secondary": "#C8C8D0",
+        "--text-muted": "#9A9AA3",
+        "--text-disabled": "#6C6D73",
     },
 
     Input: {
-        "--input-bg": "#202124",
-        "--input-bg-hover": "#26272B",
-        "--input-border": "#44454A",
-        "--input-border-focus": "#5B4BFF",
-        "--input-border-error": "#EF4444",
-        "--input-placeholder": "#7E8190",
-        "--input-disabled": "#18191B",
-    },
-
-    Buttons: {
-        "--button-primary": "#5B4BFF",
-        "--button-primary-hover": "#6D5FFF",
-        "--button-primary-active": "#5141F2",
-        "--button-secondary": "#2A2B2D",
-        "--button-secondary-hover": "#343539",
-        "--button-danger": "#EF4444",
-        "--button-danger-hover": "#DC2626",
+        "--input-bg": "#111217",
+        "--input-border": "#2C292A",
+        "--input-focus": "#6B58D6",
+        "--placeholder": "#9A9AA3",
     },
 
     Status: {
         "--success": "#22C55E",
-        "--success-bg": "#163A26",
-
-        "--warning": "#EAB308",
-        "--warning-bg": "#3B320A",
-
+        "--warning": "#F59E0B",
         "--danger": "#EF4444",
-        "--danger-bg": "#431A1A",
-
         "--info": "#3B82F6",
-        "--info-bg": "#172A45",
     },
 
     Progress: {
-        "--progress-bg": "#303136",
-        "--progress-fill": "#5B4BFF",
-        "--progress-success": "#22C55E",
-        "--progress-warning": "#EAB308",
-        "--progress-danger": "#EF4444",
+        "--progress-bg": "#202126",
+        "--progress-fill": "#6B58D6",
     },
 
-    Icons: {
-        "--icon-primary": "#FFFFFF",
-        "--icon-secondary": "#B6B8C0",
-        "--icon-muted": "#7E8190",
-        "--icon-accent": "#5B4BFF",
+    Shadow: {
+        "--shadow-sm": "0 2px 6px rgba(0,0,0,0.35)",
+        "--shadow-md": "0 8px 20px rgba(0,0,0,0.45)",
+        "--shadow-lg": "0 16px 40px rgba(0,0,0,0.6)",
     },
 
-    Shadows: {
-        "--shadow-sm": "0 1px 2px rgba(0,0,0,0.25)",
-        "--shadow-md": "0 4px 12px rgba(0,0,0,0.35)",
-        "--shadow-lg": "0 8px 24px rgba(0,0,0,0.45)",
-        "--shadow-glow": "0 0 24px rgba(91,75,255,0.35)",
+    Radius: {
+        "--radius-sm": "6px",
+        "--radius-md": "10px",
+        "--radius-lg": "16px",
+        "--radius-xl": "24px",
+        "--radius-full": "9999px",
     },
 
-    Charts: {
-        "--chart-1": "#5B4BFF",
-        "--chart-2": "#22C55E",
-        "--chart-3": "#EAB308",
-        "--chart-4": "#EF4444",
-        "--chart-5": "#3B82F6",
-        "--chart-6": "#EC4899",
+    Spacing: {
+        "--space-xs": "4px",
+        "--space-sm": "8px",
+        "--space-md": "12px",
+        "--space-lg": "16px",
+        "--space-xl": "24px",
+        "--space-2xl": "32px",
     },
 
-    Selection: {
-        "--selection-bg": "#5B4BFF33",
-        "--selection-border": "#5B4BFF",
+    Motion: {
+        "--transition-fast": "150ms ease",
+        "--transition-normal": "250ms ease",
+        "--transition-slow": "350ms ease",
+    },
+
+    Effects: {
+        "--focus-ring": "0 0 0 3px rgba(107,88,214,0.35)",
+        "--glass-bg": "rgba(22,22,28,0.75)",
+        "--glass-border": "rgba(255,255,255,0.06)",
     },
 };
 
@@ -243,7 +218,7 @@ export default function ColorCode() {
 
                     <div className="flex items-center justify-center w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900 py-3 gap-5 px-3">
                         <Search />
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search colors..." className="w-full focus:outline-0"/>
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search colors..." className="w-full focus:outline-0" />
                     </div>
                 </div>
 
