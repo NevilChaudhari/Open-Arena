@@ -12,7 +12,7 @@ interface Props{
 
 export default function WalletUI({user}: Props) {
     return (
-        <div className="flex flex-col p-5 gap-10 w-full h-full">
+        <div className="flex flex-col gap-10 w-full h-full">
             {/* Header */}
             < div className="flex flex-col" >
                 <span className="text-4xl font-semibold">Wallet</span>

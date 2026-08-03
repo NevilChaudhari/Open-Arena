@@ -13,7 +13,7 @@ export default function TournamentUI() {
     const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('All')
     return (
         <div className="flex w-full">
-            <div className="flex w-full h-screen flex-col p-5 gap-10 overflow-y-auto scrollbar-none">
+            <div className="flex w-full h-screen flex-col gap-10 overflow-y-auto scrollbar-none">
 
                 {/* Header */}
                 <div className="flex flex-col">
@@ -57,7 +57,7 @@ export default function TournamentUI() {
                                 <td className="px-5 py-4">
                                     <div className="flex items-center gap-3">
                                         <Image
-                                            src="/valorant.jpg"
+                                            src="/Valorant.jpg"
                                             alt="Valorant"
                                             width={72}
                                             height={52}

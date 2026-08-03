@@ -1,0 +1,153 @@
+'use client'
+
+import { useState } from "react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
+
+interface Game {
+    id: number
+    name: string
+    icon: string | null
+}
+
+interface Props {
+    games: Game[] | null
+}
+
+type teamSize = 'solo' | 'duo' | 'squad'
+
+export default function AddTournamentUI({ games }: Props) {
+
+    const [selectedGame, setSelectedGame] = useState<Game>({ id: 0, name: 'select game', icon: null });
+    const [openGamesDropdown, setOpenGamesDropdown] = useState(false);
+    const [openAddGame, setOpenAddGame] = useState(false);
+    const [preview, setPreview] = useState<string | null>(null);
+    const [gameName, setGameName] = useState('');
+    const [logo, setLogo] = useState<File | null>(null);
+    const [teamSize, setTeamSize] = useState<teamSize>('solo');
+
+    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setLogo(file);
+        setPreview(URL.createObjectURL(file));
+    };
+
+    const addGame = async () => {
+        if (!logo) {
+            alert("Please select an image");
+            return;
+        }
+        const formData = new FormData();
+        formData.append("name", gameName);
+        formData.append("image", logo);
+
+        await fetch("/api/games", {
+            method: "POST",
+            body: formData,
+        });
+        setOpenAddGame(false);
+    }
+
+    return (
+        <div className="w-full h-screen overflow-y-auto flex flex-col gap-5">
+
+            {/* Pop up */}
+            {openAddGame && (<div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="flex bg-[#0A0C0F] w-100 h-100 items-center justify-center border border-[#2C292A] rounded-md">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                        <div className="w-105 rounded-xl border border-[#2C292A] bg-[#0A0C0F] p-6 shadow-xl">
+
+                            {/* Header */}
+                            <div className="mb-6 flex items-center justify-between">
+                                <h2 className="text-2xl font-bold">Add Game</h2>
+                            </div>
+
+                            {/* Logo Preview */}
+                            <div className="mb-5 flex justify-center">
+                                <div className="flex h-36 w-36 items-center justify-center rounded-lg border-2 border-dashed border-[#3F3E41] bg-[#16161C]">
+                                    {preview ? <img src={preview} alt="Game Logo" className="h-full w-full object-contain p-3" /> : <span className="text-sm text-gray-500">Logo Preview</span>}
+                                </div>
+                            </div>
+
+                            {/* Game Name */}
+                            <div className="mb-4">
+                                <label className="mb-2 block text-sm font-medium">Game Name</label>
+                                <input type="text" value={gameName} onChange={(e) => setGameName(e.target.value)} placeholder="Enter game name" className="w-full rounded-md border border-[#3F3E41] bg-[#16161C] px-4 py-2 outline-none focus:border-[#6B58D6]" />
+                            </div>
+
+                            {/* Logo Upload */}
+                            <div className="mb-6">
+                                <label className="mb-2 block text-sm font-medium">Game Logo</label>
+                                <input type="file" accept="image/*" onChange={handleLogoChange} className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-[#6B58D6] file:px-4 file:py-2 file:text-white hover:file:bg-[#6B58D6]/70" />
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex justify-end gap-3">
+                                <div onClick={() => setOpenAddGame(false)} className="cursor-pointer rounded-md border border-[#3F3E41] px-5 py-2 hover:bg-[#1A1C20]" >Cancel</div>
+                                <div onClick={addGame} className="cursor-pointer rounded-md bg-[#6B58D6] px-5 py-2 font-medium hover:bg-[#6B58D6]/70" >Upload</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>)}
+
+            {/* Header */}
+            <div className="flex flex-col">
+                <span className="text-4xl font-semibold">Create Tournament</span>
+                <span className="text-md text-[#7E8190]">Setup your tournament details</span>
+            </div>
+
+            <div className="flex flex-col bg-[#16161C] border border-[#3F3E41] h-auto rounded-md p-5 gap-5">
+                {/* Header */}
+                <div className="flex items gap-5">
+                    <span className="w-10 h-10 bg-[#6B58D6] rounded-full flex items-center justify-center">1</span>
+                    <span className="flex items-center justify-center font-semibold text-xl">Basic Information</span>
+                </div>
+                <div className="flex gap-10">
+                    {/* Tournament Name */}
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[#9A9AA3]">Tournament Name</span>
+                        <input type="text" className="border border-[#2C292A] bg-[#111217] px-2 py-3 w-100 rounded-md" placeholder="Enter Tournament Name" />
+                    </div>
+
+                    {/* Tournament Game */}
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[#9A9AA3]">Game</span>
+                        <div className="relative w-105">
+                            {/* Button */}
+                            <div onClick={() => setOpenGamesDropdown(!openGamesDropdown)} className="flex w-full items-center justify-between rounded-lg border border-[#2C292A] bg-[#111217] px-3 py-2" >
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#1C1D23]">
+                                        <div className="flex w-8 h-8 p-1 items-center justify-center">{selectedGame.icon && (<img src={selectedGame.icon} alt={selectedGame.name} className="w-full h-full object-cover" />)}</div>
+                                    </div>
+                                    <span className="text-lg text-white font-semibold"> {selectedGame.name} </span>
+                                </div>
+                                {openGamesDropdown ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
+                            </div>
+
+                            {/* Dropdown */}
+                            {openGamesDropdown && (
+                                <div className="absolute mt-2 flex flex-col gap-1 w-full overflow-hidden rounded-lg border border-[#2C292A] bg-[#111217] shadow-xl">
+                                    {games?.map((game) => (
+                                        <div key={game.name} onClick={() => { setSelectedGame(game); setOpenGamesDropdown(false); }} className="flex cursor-pointer w-full items-center gap-3 px-3 py-2 hover:bg-[#16161C]" >
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#1C1D23]">
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#1C1D23]">
+                                                    <div className="flex w-8 h-8 p-1 items-center justify-center">{game.icon && (<img src={game.icon} alt={game.name} className="w-full h-full object-cover" />)}</div>
+                                                </div>
+                                            </div>
+                                            <span className="text-lg text-white font-semibold"> {game.name} </span>
+                                        </div>
+                                    ))}
+                                    <div onClick={() => { setOpenGamesDropdown(false); setOpenAddGame(true) }} className="flex cursor-pointer w-full items-center justify-center border border-dashed border-[#6B58D6] rounded-md px-3 py-2 hover:bg-[#6B58D6]/50" >
+                                        <span className="text-lg text-white font-semibold"> Add Game </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

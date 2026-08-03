@@ -10,9 +10,9 @@ export default function HomeUI() {
     const router = useRouter();
 
     return (
-        <div className="flex w-full h-full overflow-hidden">
+        <div className="flex w-full h-full gap-5 overflow-hidden">
             {/* Left Part */}
-            <div className="flex flex-col p-5 gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
+            <div className="flex flex-col gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
                 {/* Navbar */}
                 <div className="flex w-full place-content-between items-center">
                     {/* Searchbox */}
