@@ -33,7 +33,7 @@ export default function Sidebar({ user, isAdmin }: Props) {
     ];
 
     return (
-        <div className="border-r-2 p-5 border-[#2A2B2D] h-screen max-w-[15%] min-w-[15%] flex flex-col overflow-hidden">
+        <div className="border-r-2 p-5 border-[#2A2B2D] h-screen max-w-1/6 min-w-1/6 flex flex-col overflow-hidden">
             <div className="flex flex-col flex-1 min-h-0">
                 {/* Logo */}
                 <div className="flex items-center gap-3">
