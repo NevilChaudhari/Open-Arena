@@ -8,6 +8,7 @@ import WIP from "@/Components/WIP";
 
 export default function HomeUI() {
     const router = useRouter();
+
     return (
         <div className="flex w-full h-full overflow-hidden">
             {/* Left Part */}
@@ -119,7 +120,7 @@ export default function HomeUI() {
                                     </td>
 
                                     {/* Action */}
-                                    <td onClick={()=>router.push('/tournaments/tournamentName')} className="px-5 py-4">
+                                    <td onClick={() => router.push('/tournaments/tournamentName')} className="px-5 py-4">
                                         <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
                                             <ChevronRight size={18} />
                                         </div>

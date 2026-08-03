@@ -1,6 +1,16 @@
 import { ArrowDownToLine, ArrowUpFromLine, ArrowUpToLine, BadgeCheck, BanknoteArrowDown, BanknoteArrowUp, Calendar, CreditCard, Dot, EllipsisVertical, Landmark, MapPin, Minus, MoveDown, PenLine, Plus, WalletMinimal } from "lucide-react";
 
-export default function WalletUI() {
+interface User {
+    id: string,
+    username: string,
+    coins: number
+}
+
+interface Props{
+    user: User
+}
+
+export default function WalletUI({user}: Props) {
     return (
         <div className="flex flex-col p-5 gap-10 w-full h-full">
             {/* Header */}
@@ -19,7 +29,7 @@ export default function WalletUI() {
                             {/* Balance */}
                             <div className="flex flex-col gap-5">
                                 <span className="text-md text-[#7E8190]">Total Balance</span>
-                                <span className="text-5xl font-semibold flex gap-2 items-center">₹99,999.99</span>
+                                <span className="text-5xl font-semibold flex gap-2 items-center">₹{user.coins}</span>
                             </div>
 
                             <div className="flex flex-col gap-3">

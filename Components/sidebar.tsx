@@ -4,9 +4,19 @@ import { BadgeCheck, Check, ChevronRight, CircleQuestionMark, CircleStar, Gift, 
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
+interface User {
+    id: string,
+    username: string,
+    coins: number
+}
+
+interface Props {
+    user: User | null
+}
+
 type Pages = 'home' | 'tournaments' | 'teams' | 'leaderboard' | 'wallet' | 'Support' | 'Rewards'
 
-export default function Sidebar() {
+export default function Sidebar({ user }: Props) {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -63,7 +73,7 @@ export default function Sidebar() {
                     {/* Username */}
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                            <span className="text-xl font-semibold">Username</span>
+                            <span className="text-md font-semibold">{user?.username}</span>
                             <div className="flex items-center justify-center text-[#A79FFF]"><BadgeCheck size={20} /></div>
                         </div>
                         <span className="text-sm text-[#9A9AA3]">Team Name</span>
@@ -75,7 +85,7 @@ export default function Sidebar() {
                 {/* Balance */}
                 <div className="flex flex-col rounded-md p-3 border border-[#3F3E41]">
                     <span className="text-xs text-[#7E8190]">Total Balance</span>
-                    <span className="text-xl font-semibold">₹99,999.99</span>
+                    <span className="text-xl font-semibold">₹{user?.coins}</span>
                 </div>
             </div>
         </div>

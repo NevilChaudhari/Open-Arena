@@ -3,10 +3,6 @@
 import Image from "next/image";
 import {
     Eye,
-    EyeOff,
-    Trophy,
-    ShieldCheck,
-    RotateCw,
     User,
     Mail,
     Lock,
@@ -16,9 +12,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Login() {
     const router = useRouter();
+    const supabase = createClient()
 
     const [TAC, setTAC] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
@@ -26,6 +24,50 @@ export default function Login() {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+
+    const signUp = async () => {
+        if(username === ''){
+            setError('* Enter Username *')
+            return;
+        }
+        if (email === '') {
+            setError('* Enter Email *')
+            return;
+        }
+        if (password.length < 6) {
+            setError('* Password\'s length should be greater than 6 *')
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError('* Confirm Password does not match with Password *')
+            return;
+        };
+        if (!TAC) {
+            setError('* You didnt\'t accept Terms and Conditions *')
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    username: username,
+                    coins: 0
+                }
+            }
+        })
+
+        const { error:userError } = await supabase.from('users').insert({
+            username: username
+        })
+
+        if (userError) console.log(`signup error: ${error}`);
+        if (error) console.log(`signup error: ${error}`);
+
+        router.refresh()
+    }
 
     return (
         <main className="h-screen overflow-hidden bg-[#09090B] bg-[url('/signup.png')] bg-cover text-white">
@@ -168,6 +210,8 @@ export default function Login() {
 
                         </div>
 
+                        {error !== '' && (<span className="text-red-500 text-xs flex items-center justify-center pt-5">{error}</span>)}
+
                         <div
                             className="mt-4 flex items-center gap-3"
                         >
@@ -190,9 +234,10 @@ export default function Login() {
                             </p>
                         </div>
 
-                        <button className="mt-5 cursor-pointer h-12 w-full rounded-xl bg-linear-to-r from-violet-600 to-indigo-600 font-semibold transition hover:opacity-90">
+
+                        <div onClick={signUp} className="mt-5 flex items-center justify-center cursor-pointer h-12 w-full rounded-xl bg-linear-to-r from-violet-600 to-indigo-600 font-semibold transition hover:opacity-90">
                             Create Account
-                        </button>
+                        </div>
 
                         <p className="mt-5 text-center text-sm text-gray-400">
                             Already have an account?

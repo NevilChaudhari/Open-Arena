@@ -1,6 +1,29 @@
-import { BadgeCheck, Calendar, MapPin, PenLine } from "lucide-react";
+'use client'
 
-export default function ProfileUI() {
+import { createClient } from "@/lib/supabase/client";
+import { BadgeCheck, Calendar, MapPin, PenLine, SquareArrowRightExit } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+interface User {
+    id: string,
+    username: string,
+    coins: number
+}
+interface Props {
+    user: User | null
+}
+
+
+export default function ProfileUI({ user }: Props) {
+    const supabase = createClient()
+    const router = useRouter()
+
+    const signOut = () => {
+        supabase.auth.signOut();
+
+        router.refresh()
+    }
+
     return (
         <div className="flex w-full h-full">
             <div className="flex flex-col p-5 w-full h-full gap-10">
@@ -18,7 +41,7 @@ export default function ProfileUI() {
                         <div className="flex flex-col gap-5">
                             {/* Username */}
                             <div className="flex gap-2">
-                                <span className="text-5xl font-semibold">Username</span>
+                                <span className="text-5xl font-semibold">{user?.username}</span>
                                 <div className="flex items-center justify-center text-[#A79FFF]"><BadgeCheck size={50} /></div>
                             </div>
 
@@ -40,7 +63,10 @@ export default function ProfileUI() {
                         </div>
                     </div>
 
-                    <div className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#452FBC] cursor-pointer hover:bg-[#452FBC]/30 px-5 py-2 rounded-md text-[#452FBC]"><PenLine size={20}/>Edit Profile</div>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#452FBC] cursor-pointer hover:bg-[#452FBC]/30 px-5 py-2 rounded-md text-[#452FBC]"><PenLine size={20} />Edit Profile</div>
+                        <div onClick={signOut} className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#EF4444] cursor-pointer hover:bg-[#EF4444]/30 px-5 py-2 rounded-md text-[#EF4444]"><SquareArrowRightExit size={20} />Log Out</div>
+                    </div>
                 </div>
             </div>
 

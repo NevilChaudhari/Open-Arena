@@ -1,7 +1,18 @@
+import { createClient } from "@/lib/supabase/server";
 import WalletUI from "./WalletUI";
 
-export default function Home() {
+interface User {
+    id: string,
+    username: string,
+    coins: number
+}
+
+export default async function Home() {
+    const supabase = await createClient();
+
+    const {data: user, error} = await supabase.from('users').select('*').single()
+
     return (
-        <WalletUI />
+        <WalletUI user={user}/>
     );
 }
