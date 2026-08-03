@@ -5,10 +5,29 @@ import { Bell, ChevronDown, ChevronRight, Gamepad2, ListFilterPlus, Mail, Search
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import { intervalToDuration } from "date-fns";
+
+interface Tournaments {
+    id: number,
+    name: string,
+    game: string,
+    type: string,
+    registrationEnds: string,
+    mode: string,
+    map: string,
+    maxPlayers: string,
+    entryFee: string,
+    pricePool: string,
+    perKill: string,
+}
+
+interface Props {
+    tournaments: Tournaments[]
+}
 
 type CategoryFilter = 'All' | 'Upcoming' | 'Live Now' | 'Completed'
 
-export default function TournamentUI() {
+export default function TournamentUI({ tournaments }: Props) {
     const router = useRouter();
     const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('All')
     return (
@@ -52,76 +71,72 @@ export default function TournamentUI() {
                         </thead>
 
                         <tbody>
-                            <tr className="border-b border-zinc-800 hover:bg-white/5">
-                                {/* Tournament */}
-                                <td className="px-5 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <Image
-                                            src="/Valorant.jpg"
-                                            alt="Valorant"
-                                            width={72}
-                                            height={52}
-                                            className="rounded-lg object-cover"
-                                        />
+                            {tournaments.map((tournament) => {
+                                return (
+                                    <tr key={tournament.id} className="border-b border-zinc-800 hover:bg-white/5">
+                                        {/* Tournament */}
+                                        <td className="px-5 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <Image
+                                                    src="/Valorant.jpg"
+                                                    alt="Valorant"
+                                                    width={72}
+                                                    height={52}
+                                                    className="rounded-lg object-cover"
+                                                />
 
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="font-medium text-white">
-                                                    Valorant Night Cup
-                                                </h3>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-medium text-white">{tournament.name}</span>
+                                                    </div>
+
+                                                    <span className="text-sm text-zinc-400"> Open to All </span>
+                                                </div>
                                             </div>
+                                        </td>
 
-                                            <p className="text-sm text-zinc-400">
-                                                Open to All
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
+                                        {/* Game */}
+                                        <td className="px-5 py-4 font-semibold tracking-wide text-white"> {tournament.game} </td>
 
-                                {/* Game */}
-                                <td className="px-5 py-4 font-semibold tracking-wide text-white">
-                                    VALORANT
-                                </td>
+                                        {/* Per Kill */}
+                                        <td className="px-5 py-4 font-medium text-white"> ₹{tournament.perKill} </td>
 
-                                {/* Per Kill */}
-                                <td className="px-5 py-4 font-medium text-white">
-                                    ₹10
-                                </td>
+                                        {/* Prize Pool */}
+                                        <td className="px-5 py-4 font-medium text-white"> ₹{tournament.pricePool} </td>
 
-                                {/* Prize Pool */}
-                                <td className="px-5 py-4 font-medium text-white">
-                                    ₹50
-                                </td>
+                                        {/* Starts */}
+                                        <td className="px-5 py-4 text-[#9A9AA3]"> {(() => {
+                                            const d = intervalToDuration({
+                                                start: new Date(),
+                                                end: new Date(tournament.registrationEnds),
+                                            });
+                                            return `${d.days ?? 0}d ${d.hours ?? 0}h ${d.minutes ?? 0}m`;
+                                        })()} </td>
 
-                                {/* Starts */}
-                                <td className="px-5 py-4 text-[#9A9AA3]">
-                                    02h 45m
-                                </td>
+                                        {/* Registration */}
+                                        <td className="px-5 py-4 text-[#9A9AA3]">
+                                            <span className="text-[#22C55E]">99</span> / {tournament.maxPlayers}
+                                        </td>
 
-                                {/* Registration */}
-                                <td className="px-5 py-4 text-[#9A9AA3]">
-                                    <span className="text-[#22C55E]">64</span> / 128
-                                </td>
+                                        {/* Entry Fee */}
+                                        <td className="px-5 py-4 text-white"> ₹{tournament.entryFee} </td>
 
-                                {/* Entry Fee */}
-                                <td className="px-5 py-4 text-white">
-                                    ₹20
-                                </td>
+                                        {/* Status */}
+                                        <td className="px-5 py-4">
+                                            <span className="rounded-md bg-[#22C55E]/20 px-3 py-2 text-sm font-medium text-[#22C55E]">
+                                                Registration Open
+                                            </span>
+                                        </td>
 
-                                {/* Status */}
-                                <td className="px-5 py-4">
-                                    <span className="rounded-md bg-[#22C55E]/20 px-3 py-2 text-sm font-medium text-[#22C55E]">
-                                        Registration Open
-                                    </span>
-                                </td>
-
-                                {/* Action */}
-                                <td onClick={()=>router.push('/tournaments/tournamentName')} className="px-5 py-4">
-                                    <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
-                                        <ChevronRight size={18} />
-                                    </div>
-                                </td>
-                            </tr>
+                                        {/* Action */}
+                                        <td onClick={() => router.push('/tournaments/tournamentName')} className="px-5 py-4">
+                                            <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
+                                                <ChevronRight size={18} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>

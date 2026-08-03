@@ -12,7 +12,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
     const { data: user, error } = await supabase.from('users').select('*').single()
     if (error) console.log(`ProfilePage fetch user error: ${error}`);
-    const { data: admin } = await supabase.from("admins").select("id").eq("id", '86a4d112-56fd-40c1-962e-95b13f9314a7').maybeSingle();
+    const { data: admin } = await supabase.from("admins").select("id").eq("id", user.id).maybeSingle();
 
     const isAdmin = !!admin;
 

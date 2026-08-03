@@ -61,7 +61,7 @@ export default function Sidebar({ user, isAdmin }: Props) {
                     {/* Pages */}
                     <div className="flex flex-col gap-3">
                         {pages.map(({ name, href, icon: Icon }) => (
-                            <div key={href} onClick={() => router.push(href)} className={`flex cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#5B4BFF] hover:text-white ${pathname === href ? "bg-[#5B4BFF] text-white" : "text-[#7E8190]"}`}><Icon />{name}</div>
+                            <div key={href} onClick={() => router.push(href)} className={`flex cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#6B58D6] hover:text-white ${pathname === href ? "bg-[#6B58D6] text-white" : "text-[#7E8190]"}`}><Icon />{name}</div>
                         ))}
                     </div>
 
@@ -70,7 +70,7 @@ export default function Sidebar({ user, isAdmin }: Props) {
                     {/* Admin Pages */}
                     {isAdmin && (<div className="flex flex-col gap-3">
                         {adminPages.map(({ name, href, icon: Icon }) => (
-                            <div key={href} onClick={() => router.push(href)} className={`flex cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#5B4BFF] hover:text-white ${pathname === href ? "bg-[#5B4BFF] text-white" : "text-[#7E8190]"}`}><Icon />{name}</div>
+                            <div key={href} onClick={() => router.push(href)} className={`flex cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#6B58D6] hover:text-white ${pathname === href ? "bg-[#6B58D6] text-white" : "text-[#7E8190]"}`}><Icon />{name}</div>
                         ))}
                     </div>)}
                 </div>

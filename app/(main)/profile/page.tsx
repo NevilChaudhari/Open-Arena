@@ -13,7 +13,6 @@ export default async function Profile() {
     const { data: user, error } = await supabase.from('users').select('*').single()
     if (error) console.log(`ProfilePage fetch user error: ${error}`);
 
-
     return (
         <ProfileUI user={user} />
     )
