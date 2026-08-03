@@ -8,10 +8,11 @@ import WIP from "@/Components/WIP";
 
 export default function HomeUI() {
     const router = useRouter();
+
     return (
-        <div className="flex w-full h-full overflow-hidden">
+        <div className="flex flex-col w-full h-full gap-5 overflow-hidden">
             {/* Left Part */}
-            <div className="flex flex-col p-5 gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
+            <div className="flex flex-col gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
                 {/* Navbar */}
                 <div className="flex w-full place-content-between items-center">
                     {/* Searchbox */}
@@ -119,7 +120,7 @@ export default function HomeUI() {
                                     </td>
 
                                     {/* Action */}
-                                    <td onClick={()=>router.push('/tournaments/tournamentName')} className="px-5 py-4">
+                                    <td onClick={() => router.push('/tournaments/tournamentName')} className="px-5 py-4">
                                         <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
                                             <ChevronRight size={18} />
                                         </div>
@@ -131,8 +132,6 @@ export default function HomeUI() {
                 </div>
             </div>
 
-            {/* Right Part */}
-            <div className="w-[30%] h-full shrink-0 border-l border-[#2A2B2D] p-5 overflow-hidden"><WIP /></div>
         </div>
     );
 }

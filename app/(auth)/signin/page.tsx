@@ -14,15 +14,44 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Login() {
     const router = useRouter();
+    const supabase = createClient();
 
-    const [rememberMe, setRememberMe] = useState(false);
-    const [checkTerms, setCheckTerms] = useState(false);
+    const [TAC, setTAC] = useState(false);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+
+    const signIn = async () => {
+        if (email === '') {
+            setError('* Enter Email *')
+            return;
+        }
+        if (password === '') {
+            setError('* Enter Password *')
+            return;
+        }
+        if (!TAC) {
+            setError('* You didnt\'t accept Terms and Conditions *')
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        })
+
+        if (error){
+            console.log(`signin error: ${error}`)
+            setError(`* ${error.message} *`)
+        };
+
+        router.refresh()
+    }
 
     return (
         <main className="h-screen overflow-hidden bg-[#09090B] bg-[url('/signup.png')] bg-cover text-white">
@@ -150,18 +179,22 @@ export default function Login() {
 
                         </div>
 
+
                         <div className="flex justify-end">
                             <p className="mt-4 ml-auto cursor-pointer text-sm text-violet-400">
                                 Forgot password?
                             </p>
                         </div>
+
+                        {error !== '' && (<span className="text-red-500 text-xs flex items-center justify-center pt-1">{error}</span>)}
+
                         <div className="mt-4 flex items-center gap-3">
-                            <div onClick={() => setCheckTerms(!checkTerms)}
-                                className={`flex h-5 w-5 cursor-pointer items-center justify-center rounded border ${checkTerms
+                            <div onClick={() => setTAC(!TAC)}
+                                className={`flex h-5 w-5 cursor-pointer items-center justify-center rounded border ${TAC
                                     ? "border-violet-500 bg-violet-600"
                                     : "border-gray-500"
                                     }`}>
-                                {checkTerms && <Check />}
+                                {TAC && <Check />}
                             </div>
 
                             <p className=" text-center text-xs text-gray-400">I agree to the <span className="cursor-pointer text-violet-400">
@@ -171,7 +204,7 @@ export default function Login() {
                                 </span></p>
                         </div>
 
-                        <div className="cursor-pointer flex items-center justify-center mt-5 h-12 w-full rounded-xl bg-linear-to-r from-violet-600 to-indigo-600 font-semibold transition hover:opacity-90">
+                        <div onClick={signIn} className="cursor-pointer flex items-center justify-center mt-5 h-12 w-full rounded-xl bg-linear-to-r from-violet-600 to-indigo-600 font-semibold transition hover:opacity-90">
                             Sign in
                         </div>
 

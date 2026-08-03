@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp, User, Users, X } from "lucide-react";
 
 interface Game {
     id: number
@@ -50,7 +50,7 @@ export default function AddTournamentUI({ games }: Props) {
     }
 
     return (
-        <div className="w-full h-screen overflow-y-auto flex flex-col gap-5">
+        <div className="w-full h-full overflow-y-auto flex flex-col gap-5">
 
             {/* Pop up */}
             {openAddGame && (<div className="fixed inset-0 flex items-center justify-center z-50">
@@ -144,6 +144,150 @@ export default function AddTournamentUI({ games }: Props) {
                                     </div>
                                 </div>
                             )}
+                        </div>
+                    </div>
+                </div>
+                {/* Tournament Type */}
+                <div className="flex flex-col gap-1">
+                    <span className="text-[#9A9AA3]">Tournament Type</span>
+                    <div className="w-full flex gap-5 justify-between">
+                        <div onClick={() => setTeamSize('solo')} className={`cursor-pointer flex h-10 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'solo' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><User /> Solo</p></div>
+                        <div onClick={() => setTeamSize('duo')} className={`cursor-pointer flex h-10 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'duo' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><Users /> Duo</p></div>
+                        <div onClick={() => setTeamSize('squad')} className={`cursor-pointer flex h-10 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'squad' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><Users /> Squad</p></div>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-col bg-[#16161C] border border-[#3F3E41] h-auto rounded-md p-5 gap-5">
+                {/* Header */}
+                <div className="flex items gap-5">
+                    <span className="w-10 h-10 bg-[#6B58D6] rounded-full flex items-center justify-center">2</span>
+                    <span className="flex items-center justify-center font-semibold text-xl">Date & Time</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <span className="text-[#9A9AA3]">Registration End Date</span>
+                    <div className="w-full max-w-sm">
+                        <div className="flex h-10 items-center justify-between rounded-md border border-white/10 bg-[#111217] px-5 transition-all duration-200 hover:border-white/15 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20">
+                            <input
+                                type="text"
+                                placeholder="Select date"
+                                onFocus={(e) => (e.target.type = "date")}
+                                onBlur={(e) => {
+                                    if (!e.target.value) e.target.type = "text";
+                                }}
+                                className="w-full bg-transparent text-lg text-white placeholder:text-gray-400 outline-none [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:invert" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col bg-[#16161C] border border-[#3F3E41] h-auto rounded-md p-5 gap-5">
+                {/* Header */}
+                <div className="mb-6 flex items-center gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6B58D6] font-semibold">
+                        3
+                    </div>
+
+                    <h2 className="text-2xl font-semibold">Tournament Details</h2>
+                </div>
+
+                {/* Fields */}
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+                    {/* Mode */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Mode 
+                        </label>
+
+                        <select className="h-10 w-full rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white outline-none focus:border-[#6B58D6]">
+                            <option>Select mode</option>
+                            <option>CS</option>
+                            <option>BR</option>
+                            <option>LW</option>
+                        </select>
+                    </div>
+
+                    {/* Map Pool */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Map Pool / Format 
+                        </label>
+
+                        <select className="h-10 w-full rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white outline-none focus:border-[#6B58D6]">
+                            <option>Select map pool or format</option>
+                            <option>CS</option>
+                            <option>BR</option>
+                            <option>LW</option>
+                        </select>
+                    </div>
+
+                    {/* Max Teams */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Max Teams / Players 
+                        </label>
+
+                        <input
+                            type="number"
+                            placeholder="e.g. 16"
+                            className="h-10 w-full rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white placeholder:text-[#73788A] outline-none focus:border-[#6B58D6]"
+                        />
+                    </div>
+
+                    {/* Entry Fee */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Entry Fee 
+                        </label>
+
+                        <div className="flex h-10 items-center rounded-md border border-[#2C292A] bg-[#111217] px-4">
+                            <span className="mr-3 rounded-full text-sm">
+                                <img src="/coin.png" alt="Rupee" className="h-9 w-10" />
+                            </span>
+
+                            <input
+                                type="number"
+                                placeholder="0"
+                                className="w-full bg-transparent text-white outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Prize Pool */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Prize Pool 
+                        </label>
+
+                        <div className="flex h-10 items-center rounded-md border border-[#2C292A] bg-[#111217] px-4">
+                            <span className="mr-3 rounded-full text-sm">
+                                <img src="/coin.png" alt="Rupee" className="h-9 w-10" />
+                            </span>
+
+                            <input
+                                type="number"
+                                placeholder="0"
+                                className="w-full bg-transparent text-white outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Kill Poll */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-[#B3B7C5]">
+                            Kill Reward
+                        </label>
+
+                        <div className="flex h-10 items-center rounded-md border border-[#2C292A] bg-[#111217] px-4">
+                            <span className="mr-3 rounded-full text-sm">
+                                <img src="/coin.png" alt="Rupee" className="h-9 w-10" />
+                            </span>
+
+                            <input
+                                type="number"
+                                placeholder="0"
+                                className="w-full bg-transparent text-white outline-none"
+                            />
                         </div>
                     </div>
                 </div>
