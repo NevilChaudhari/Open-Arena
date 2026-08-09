@@ -11,7 +11,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     const supabase = await createClient();
 
     const { data: user, error } = await supabase.from('users').select('*').single()
-    if (error) console.log(`ProfilePage fetch user error: ${error}`);
+    if (error) console.log(`ProfilePage fetch user error: ${JSON.stringify(error)}`);
+    if (!user){
+        console.log(`ProfilePage fetch user error: User value null/undefined`);
+        return;
+    }
     const { data: admin } = await supabase.from("admins").select("id").eq("id", user.id).maybeSingle();
 
     const isAdmin = !!admin;
