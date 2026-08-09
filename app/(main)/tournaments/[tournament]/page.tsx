@@ -23,7 +23,7 @@ export default async function TournamentPage({ params }: { params: Promise<{ tou
     const { data: tournamentPlayers, error: tournamentPlayersError } = await supabase.from("tournamentPlayers").select("*, users(*)").eq("tournamentId", tournament);
     if (tournamentPlayersError) {
         console.log(
-            `TournamentsPage fetch tournament error: ${JSON.stringify(tournamentPlayersError)}`
+            `TournamentsPage fetch tournamentPlayers error: ${JSON.stringify(tournamentPlayersError)}`
         );
     }
 

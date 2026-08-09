@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Gamepad2, ShieldCheck, Crosshair, Copy, X, } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface TournamentDetails {
     id: string;
@@ -20,6 +21,7 @@ interface TournamentDetails {
 interface User {
     id: string;
     username: string
+    coins: number
 }
 
 interface TournamentPlayers {
@@ -47,11 +49,26 @@ const RULES = [
 type Tab = "Overview" | "Rules" | "Squads"
 
 export default function TournamentDetails({ tournamentDetails, user, tournamentPlayers }: Props) {
+    const router = useRouter()
+
     const [tab, setTab] = useState<Tab>("Overview");
     const [joinPopUp, setJoinPopUp] = useState(false);
-    const canJoin = (tournamentPlayers.some((t) => t.playerId !== user.id) && tournamentDetails.maxPlayers > tournamentPlayers.length);
+
+    const hasJoined = tournamentPlayers.some(
+        (t) => t.playerId === user.id
+    );
+
+    const hasSpace =
+        tournamentDetails.maxPlayers > tournamentPlayers.length;
+
+    const canJoin = !hasJoined && hasSpace;
+    let [isJoining, setIsJoining] = useState(false);
 
     const joinTournament = async () => {
+        if (user.coins < tournamentDetails.entryFee) {
+            return;
+        }
+        setIsJoining(true);
         const res = await fetch('/api/tournament/join', {
             method: "POST",
             body: JSON.stringify({
@@ -66,6 +83,16 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
             console.log(`tournament joining error: ${data.error}`);
             return;
         }
+
+        const resa = await fetch('/api/transactions/updateData', {
+            method: "POST",
+            body: JSON.stringify({
+                ammount: tournamentDetails.entryFee,
+                userId: user.id
+            })
+        })
+
+        router.refresh()
     }
 
     return (
@@ -115,14 +142,15 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
                     </div>
                 </div>
 
-                <div onClick={canJoin ? joinTournament : undefined} className={`rounded-[10px] text-xl font-semibold hover:bg-[#6B58D6]/50 ${canJoin ? 'cursor-pointer bg-[#6B58D6]' : 'bg-[#6B58D6]/50 cursor-not-allowed'} border border-[#2C292A] text-white px-4 py-3 text-center`} >
-                    {canJoin
+                <div onClick={(canJoin && isJoining == false) ? joinTournament : undefined} className={`rounded-[10px] text-xl font-semibold hover:bg-[#6B58D6]/50 ${(canJoin && isJoining == false) ? 'cursor-pointer bg-[#6B58D6]' : 'bg-[#6B58D6]/50 cursor-not-allowed'} border border-[#2C292A] text-white px-4 py-3 text-center`} >
+                    {(canJoin && !isJoining)
                         ? 'Join'
                         : tournamentPlayers.some((t) => t.playerId === user.id)
                             ? 'Joined'
                             : tournamentDetails.maxPlayers <= tournamentPlayers.length
                                 ? 'Tournament Full'
-                                : 'Closed'}
+                                : 'Joined'
+                    }
                 </div>
             </div>
 
@@ -151,7 +179,7 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
                             </div>
                             <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-10 text-center">
                                 <p className="text-10 uppercase tracking-wide text-[#6C6D73]">Slots Filled</p>
-                                <p className="text-2xl font-semibold">₹{tournamentDetails.maxPlayers}</p>
+                                <p className="text-2xl font-semibold">{tournamentDetails.maxPlayers}</p>
                             </div>
                         </div>
 

@@ -27,7 +27,7 @@ export default function Login() {
     const [error, setError] = useState<string>('');
 
     const signUp = async () => {
-        if(username === ''){
+        if (username === '') {
             setError('* Enter Username *')
             return;
         }
@@ -58,13 +58,13 @@ export default function Login() {
                 }
             }
         })
+        if (error) console.log(`signup error: ${error}`);
 
-        const { error:userError } = await supabase.from('users').insert({
+        const { error: userError } = await supabase.from('users').insert({
             username: username
         })
 
-        if (userError) console.log(`signup error: ${error}`);
-        if (error) console.log(`signup error: ${error}`);
+        if (userError) console.log(`signup data entry error: ${error}`);
 
         router.refresh()
     }
