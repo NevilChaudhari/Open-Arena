@@ -10,9 +10,11 @@ interface User {
 export default async function Home() {
     const supabase = await createClient();
 
-    const {data: user, error} = await supabase.from('users').select('*').single()
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { data: userData, error } = await supabase.from('users').select('*').eq('id', user?.id).single()
 
     return (
-        <WalletUI user={user}/>
+        <WalletUI user={userData} />
     );
 }

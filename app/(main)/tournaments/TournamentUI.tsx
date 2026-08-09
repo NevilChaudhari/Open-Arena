@@ -17,17 +17,22 @@ interface Tournaments {
     map: string,
     maxPlayers: string,
     entryFee: string,
-    pricePool: string,
+    prizePool: string,
     perKill: string,
+}
+
+interface TournamentPlayers {
+    tournamentId : number,
 }
 
 interface Props {
     tournaments: Tournaments[]
+    tournamentPlayers: TournamentPlayers[]
 }
 
 type CategoryFilter = 'All' | 'Upcoming' | 'Live Now' | 'Completed'
 
-export default function TournamentUI({ tournaments }: Props) {
+export default function TournamentUI({ tournaments, tournamentPlayers }: Props) {
     const router = useRouter();
     const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('All')
     return (
@@ -102,7 +107,7 @@ export default function TournamentUI({ tournaments }: Props) {
                                         <td className="px-5 py-4 font-medium text-white"> ₹{tournament.perKill} </td>
 
                                         {/* Prize Pool */}
-                                        <td className="px-5 py-4 font-medium text-white"> ₹{tournament.pricePool} </td>
+                                        <td className="px-5 py-4 font-medium text-white"> ₹{tournament.prizePool} </td>
 
                                         {/* Starts */}
                                         <td className="px-5 py-4 text-[#9A9AA3]"> {(() => {
@@ -115,7 +120,7 @@ export default function TournamentUI({ tournaments }: Props) {
 
                                         {/* Registration */}
                                         <td className="px-5 py-4 text-[#9A9AA3]">
-                                            <span className="text-[#22C55E]">99</span> / {tournament.maxPlayers}
+                                            <span className="text-[#22C55E]">{tournamentPlayers.filter((t) => t.tournamentId  === tournament.id).length}</span> / {tournament.maxPlayers}
                                         </td>
 
                                         {/* Entry Fee */}
@@ -129,7 +134,7 @@ export default function TournamentUI({ tournaments }: Props) {
                                         </td>
 
                                         {/* Action */}
-                                        <td onClick={() => router.push('/tournaments/tournamentName')} className="px-5 py-4">
+                                        <td onClick={() => router.push(`/tournaments/${tournament.id}`)} className="px-5 py-4">
                                             <div className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white">
                                                 <ChevronRight size={18} />
                                             </div>

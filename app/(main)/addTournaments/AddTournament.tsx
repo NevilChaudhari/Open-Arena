@@ -28,7 +28,7 @@ export default function AddTournamentUI({ games }: Props) {
     const [selectedGameMap, setSelectedGameMap] = useState<string>('Select Map');
     const [gameMaxPlayers, setGameMaxPlayers] = useState<number>(0);
     const [gameEntryFee, setGameEntryFee] = useState<number>(0);
-    const [gamePricePool, setGamePricePool] = useState<number>(0);
+    const [gamePrizePool, setGamePrizePool] = useState<number>(0);
     const [gamePerKill, setGamePerKill] = useState<number>(0);
     const [openGamesDropdown, setOpenGamesDropdown] = useState(false);
     const [openGameModeDropdown, setOpenGameModeDropdown] = useState(false);
@@ -65,7 +65,7 @@ export default function AddTournamentUI({ games }: Props) {
     }
 
     const addTournament = async () => {
-        if (!gameName || !selectedGame || !teamSize || !date || !selectedGameMode || !selectedGameMap || !gameMaxPlayers || !gameEntryFee || !gamePricePool || !gamePerKill) {
+        if (!gameName || !selectedGame || !teamSize || !date || !selectedGameMode || !selectedGameMap || !gameMaxPlayers || !gameEntryFee || !gamePrizePool || !gamePerKill) {
             console.log("Please fill all data");
             return;
         }
@@ -82,7 +82,7 @@ export default function AddTournamentUI({ games }: Props) {
                 map: selectedGameMap,
                 maxPlayers: gameMaxPlayers,
                 entryFee: gameEntryFee,
-                pricePool: gamePricePool,
+                prizePool: gamePrizePool,
                 perKill: gamePerKill,
             }),
         });
@@ -303,7 +303,7 @@ export default function AddTournamentUI({ games }: Props) {
                         <div className="space-y-2">
                             <span className="text-[#9A9AA3]">Prize Pool</span>
 
-                            <input type="number" value={gamePricePool} onChange={(e) => setGamePricePool(Number(e.target.value))} className="no-spinner h-12 w-full rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white placeholder:text-[#73788A] outline-none focus:border-[#6B58D6]" />
+                            <input type="number" value={gamePrizePool} onChange={(e) => setGamePrizePool(Number(e.target.value))} className="no-spinner h-12 w-full rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white placeholder:text-[#73788A] outline-none focus:border-[#6B58D6]" />
                         </div>
 
                         {/* Per Kill */}
