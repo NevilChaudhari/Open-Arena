@@ -98,51 +98,63 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
     return (
         <div className="flex h-full w-full flex-col gap-5 font-['Inter'] text-white">
             {/* Banner */}
-            <div className="relative flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#2C292A] bg-[#16161C] px-6 py-6">
+            <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 rounded-2xl border border-[#2C292A] bg-[#16161C] px-4 py-5 md:px-6 md:py-6">
 
-                <div className="flex flex-col gap-5 justify-center">
-                    <h1 className="mt-3 font-['Rajdhani'] text-3xl font-bold leading-tight sm:text-4xl">{tournamentDetails.name}</h1>
-                    <div className="gap-5 flex">
-                        <div className="flex items-center justify-start gap-5">
-                            <div className="flex w-10 h-10 bg-[#6B58D6] items-center justify-center rounded-md">
+                <div className="flex flex-col gap-5 justify-center w-full">
+                    <div className="flex items-start justify-between gap-3">
+                        <h1 className="mt-3 flex-1 min-w-0 wrap-break-word text-2xl font-bold leading-tight md:text-4xl">{tournamentDetails.name}</h1>
+                        <div onClick={(canJoin && isJoining == false) ? joinTournament : undefined} className={`md:hidden shrink-0 rounded-[10px] text-base font-semibold hover:bg-[#6B58D6]/50 ${(canJoin && isJoining == false) ? 'cursor-pointer bg-[#6B58D6]' : 'bg-[#6B58D6]/50 cursor-not-allowed'} border border-[#2C292A] text-white px-4 py-3 text-center`} >
+                            {(canJoin && !isJoining)
+                                ? 'Join'
+                                : tournamentPlayers.some((t) => t.playerId === user.id)
+                                    ? 'Joined'
+                                    : tournamentDetails.maxPlayers <= tournamentPlayers.length
+                                        ? 'Tournament Full'
+                                        : 'Joined'
+                            }
+                        </div>
+                    </div>
+                    <div className="gap-3 md:gap-5 md:flex grid grid-cols-2">
+                        <div className="flex items-center justify-start gap-3 md:gap-5">
+                            <div className="flex w-10 h-10 shrink-0 bg-[#6B58D6] items-center justify-center rounded-md">
                                 <Gamepad2 />
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col min-w-0 text-sm md:text-base">
                                 <span className="text-sm text-[#9A9AA3]">Game Name</span>
                                 {tournamentDetails.game}
                             </div>
                         </div>
-                        <div className="flex items-center justify-center gap-5">
-                            <div className="flex w-10 h-10 bg-[#6B58D6] items-center justify-center rounded-md">
+                        <div className="flex items-center justify-start gap-3 md:gap-5">
+                            <div className="flex w-10 h-10 shrink-0 bg-[#6B58D6] items-center justify-center rounded-md">
                                 <Gamepad2 />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-sm text-[#9A9AA3]">Game Name</span>
+                            <div className="flex flex-col min-w-0 text-sm md:text-base">
+                                <span className="text-sm text-[#9A9AA3]">Game Map</span>
                                 {tournamentDetails.map}
                             </div>
                         </div>
-                        <div className="flex items-center justify-center gap-5">
-                            <div className="flex w-10 h-10 bg-[#6B58D6] items-center justify-center rounded-md">
+                        <div className="flex items-center justify-start gap-3 md:gap-5">
+                            <div className="flex w-10 h-10 shrink-0 bg-[#6B58D6] items-center justify-center rounded-md">
                                 <Gamepad2 />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-sm text-[#9A9AA3]">Game Name</span>
+                            <div className="flex flex-col min-w-0 text-sm md:text-base">
+                                <span className="text-sm text-[#9A9AA3]">Game Mode</span>
                                 {tournamentDetails.mode}
                             </div>
                         </div>
-                        <div className="flex items-center justify-center gap-5">
-                            <div className="flex w-10 h-10 bg-[#6B58D6] items-center justify-center rounded-md">
+                        <div className="flex items-center justify-start gap-3 md:gap-5">
+                            <div className="flex w-10 h-10 shrink-0 bg-[#6B58D6] items-center justify-center rounded-md">
                                 <Gamepad2 />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-sm text-[#9A9AA3]">Game Name</span>
+                            <div className="flex flex-col min-w-0 text-sm md:text-base">
+                                <span className="text-sm text-[#9A9AA3]">Game Type</span>
                                 {tournamentDetails.type}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div onClick={(canJoin && isJoining == false) ? joinTournament : undefined} className={`rounded-[10px] text-xl font-semibold hover:bg-[#6B58D6]/50 ${(canJoin && isJoining == false) ? 'cursor-pointer bg-[#6B58D6]' : 'bg-[#6B58D6]/50 cursor-not-allowed'} border border-[#2C292A] text-white px-4 py-3 text-center`} >
+                <div onClick={(canJoin && isJoining == false) ? joinTournament : undefined} className={`md:flex hidden rounded-[10px] text-xl font-semibold hover:bg-[#6B58D6]/50 ${(canJoin && isJoining == false) ? 'cursor-pointer bg-[#6B58D6]' : 'bg-[#6B58D6]/50 cursor-not-allowed'} border border-[#2C292A] text-white px-4 py-3 text-center`} >
                     {(canJoin && !isJoining)
                         ? 'Join'
                         : tournamentPlayers.some((t) => t.playerId === user.id)
@@ -164,26 +176,26 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
             <div className="flex-1 overflow-y-auto pb-2 pr-1">
                 {tab === "Overview" && (
                     <div className="flex flex-col gap-5">
-                        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-[#202126] sm:grid-cols-4">
-                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-10 text-center">
-                                <p className="text-10 uppercase tracking-wide text-[#6C6D73]">Entry Fee</p>
+                        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-[#202126] md:grid-cols-4">
+                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Entry Fee</p>
                                 <p className="text-2xl font-semibold">₹{tournamentDetails.entryFee}</p>
                             </div>
-                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-10 text-center">
-                                <p className="text-10 uppercase tracking-wide text-[#6C6D73]">Per Kill</p>
+                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Per Kill</p>
                                 <p className="text-2xl font-semibold">₹{tournamentDetails.entryFee}</p>
                             </div>
-                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-10 text-center">
-                                <p className="text-10 uppercase tracking-wide text-[#6C6D73]">Prize Pool</p>
+                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Prize Pool</p>
                                 <p className="text-2xl font-semibold">₹{tournamentDetails.prizePool}</p>
                             </div>
-                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-10 text-center">
-                                <p className="text-10 uppercase tracking-wide text-[#6C6D73]">Slots Filled</p>
+                            <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Slots Filled</p>
                                 <p className="text-2xl font-semibold">{tournamentDetails.maxPlayers}</p>
                             </div>
                         </div>
 
-                        <div className={`bg-[#16161C] border border-[#2C292A] rounded-2xl p-5`}>
+                        <div className={`bg-[#16161C] border border-[#2C292A] rounded-2xl p-4 md:p-5`}>
                             <div className="flex items-center justify-between text-sm">
                                 <span className="font-semibold text-white">Slots Filling Fast</span>
                                 <span><span className="text-[#22C55E]">{tournamentPlayers.length}</span> / {tournamentDetails.maxPlayers}</span>
@@ -205,7 +217,7 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
                 )}
 
                 {tab === "Rules" && (
-                    <div className={`bg-[#16161C] border border-[#2C292A] rounded-2xl p-5`}>
+                    <div className={`bg-[#16161C] border border-[#2C292A] rounded-2xl p-4 md:p-5`}>
                         <p className="font-['Rajdhani'] text-lg font-bold">Rules & fair play</p>
                         <div className="mt-4 flex flex-col gap-3">
                             {RULES.map((rule, i) => (
@@ -219,9 +231,9 @@ export default function TournamentDetails({ tournamentDetails, user, tournamentP
                 )}
 
                 {tab === "Squads" && (
-                    <div className={`bg-[#16161C] border border-[#2C292A] rounded-2xl p-5`}>
+                    <div className={`bg-[#16161C] border border-[#2C292A] rounded-md md:rounded-2xl px-2 py-3 md:p-5`}>
                         <p className="font-['Rajdhani'] text-lg font-bold">Registered {tournamentDetails.type === 'squad' ? 'Squads' : 'Players'} ({tournamentPlayers.length})</p>
-                        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-4">
+                        <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-4">
                             {tournamentPlayers.map((tournamentPlayer, i) => {
                                 return (
                                     <div key={tournamentPlayer.id} className="flex items-center gap-3 rounded-[10px] border border-[#2C292A] bg-[#0A0C0F] px-3.5 py-2.5">

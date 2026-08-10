@@ -1,3 +1,5 @@
+import BottomNavbar from "@/Components/BottomNavbar";
+import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/sidebar";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,8 +23,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <div className="h-screen w-screen flex overflow-hidden bg-[#080909] text-white">
             <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
             <Sidebar user={userData} isAdmin={isAdmin} />
+            <BottomNavbar isAdmin={isAdmin} />
+            <Navbar />
 
-            <main className="flex-1 p-5 overflow-hidden">
+            <main className="flex-1 md:p-5 p-1 overflow-hidden my-17 md:my-0">
                 {children}
             </main>
         </div>

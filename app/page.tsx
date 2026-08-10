@@ -1,16 +1,15 @@
 'use client'
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Trophy,
   Users,
-  Radio,
   Zap,
   ShieldCheck,
   Wallet,
   Crosshair,
-  ChevronRight,
   Swords,
   Timer,
   ArrowRight,
@@ -25,13 +24,6 @@ export default function Home() {
     { name: "FREE FIRE", tag: "GARENA FREE FIRE MAX" },
     { name: "VALORANT", tag: "RIOT VALORANT" },
     { name: "COD MOBILE", tag: "CALL OF DUTY MOBILE" },
-  ];
-
-  const LIVE_MATCHES = [
-    { game: "BGMI", name: "Chicken Dinner Cup", perKill: 9, players: 10, cap: 99 },
-    { game: "FREE FIRE", name: "Booyah League S4", perKill: 10, players: 30, cap: 99 },
-    { game: "BGMI", name: "Erangel Elite Clash", perKill: 10, players: 8, cap: 10 },
-    { game: "FREE FIRE", name: "Purgatory Purge", perKill: 10, players: 22, cap: 50 },
   ];
 
   const STEPS = [
@@ -74,19 +66,10 @@ export default function Home() {
       "bg-[image:linear-gradient(rgba(107,88,214,0.10)_1px,transparent_1px),linear-gradient(90deg,rgba(107,88,214,0.10)_1px,transparent_1px)] bg-[length:44px_44px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black_40%,transparent_90%)]",
   };
 
-  function LiveDot() {
-    return (
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EF4444] opacity-75" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#EF4444]" />
-      </span>
-    );
-  }
-
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   return (
-    <div className="min-h-screen w-full bg-[#040507] font-['Inter'] text-white antialiased">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#040507] font-['Inter'] text-white antialiased">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
@@ -96,31 +79,21 @@ export default function Home() {
 
       {/* ---------------- NAV ---------------- */}
       <header className={`sticky top-0 z-50 border-b border-[#202126] ${CX.glass}`}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#6B58D6]">
-              <Swords className="h-4.5 w-4.5" strokeWidth={2.5} />
-            </div>
-            <div className="leading-tight">
-              <p className="font-['Rajdhani'] text-[17px] font-bold tracking-wide">OPEN ARENA</p>
-              <p className="text-[10px] font-semibold tracking-[0.22em] text-[#A79FFF]">TOURNAMENTS</p>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" width={40} height={40} alt="Logo" />
+
+            <div>
+              <h2 className="font-bold text-sm tracking-wide"> OPEN ARENA </h2>
+              <p className="text-xs tracking-[0.35em] text-violet-500"> TOURNAMENTS </p>
             </div>
           </div>
 
-          <nav className="hidden items-center gap-8 text-sm text-[#9A9AA3] md:flex">
-            {["Games", "Live Now", "How it works", "Leaderboard"].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase().replace(/\s/g, "-")}`}
-                className="transition-colors duration-150 hover:text-white"
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-
           <div className="flex items-center gap-3">
-            <button onClick={() => { router.push('/signin') }} className="hidden hover:text-white cursor-pointer text-sm font-medium text-[#C8C8D0] focus-visible:outline-none focus-visible:shadow-[0_0_0_3px_rgba(107,88,214,0.35)] sm:block">
+            <button
+              onClick={() => { router.push('/signin') }}
+              className="cursor-pointer text-xs font-medium text-[#C8C8D0] transition-colors duration-150 hover:text-white focus-visible:outline-none focus-visible:shadow-[0_0_0_3px_rgba(107,88,214,0.35)] sm:text-sm"
+            >
               Sign in
             </button>
           </div>
@@ -129,28 +102,31 @@ export default function Home() {
 
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden">
-        <div className={`pointer-events-none absolute inset-0 h-160 ${CX.gridFade}`} />
-        <div className="pointer-events-none absolute left-1/2 -top-45 h-120 w-195 -translate-x-1/2 rounded-full bg-[#6B58D6]/25 blur-[120px]" />
+        <div className={`pointer-events-none absolute inset-0 h-100 sm:h-130 lg:h-160 ${CX.gridFade}`} />
+        <div className="pointer-events-none absolute left-1/2 -top-32 h-70 w-70 -translate-x-1/2 rounded-full bg-[#6B58D6]/25 blur-[90px] sm:-top-45 sm:h-120 sm:w-195 sm:blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-16 sm:pt-24">
+        <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-16 lg:pt-24">
           <div
             className={`mx-auto flex max-w-3xl flex-col items-center text-center transition-all duration-700 ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
               }`}
           >
 
-            <h1 className="font-['Rajdhani'] text-[44px] font-bold leading-[1.05] tracking-tight sm:text-[64px]">
+            <h1 className="font-['Rajdhani'] text-[32px] font-bold leading-[1.1] tracking-tight sm:text-[44px] sm:leading-[1.05] lg:text-[64px]">
               Every kill counts.
               <br />
               <span className="text-[#A79FFF]">Every win pays out.</span>
             </h1>
 
-            <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#9A9AA3]">
+            <p className="mt-4 max-w-xl px-2 text-sm leading-relaxed text-[#9A9AA3] sm:mt-5 sm:px-0 sm:text-[16px]">
               Open Arena hosts verified BGMI and Free Fire tournaments with real prize pools,
               instant room codes, and payouts that land before your next match starts.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button onClick={() => router.push('/signin')} className={`${CX.btnPrimary} cursor-pointer flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold`}>
+            <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row">
+              <button
+                onClick={() => router.push('/signin')}
+                className={`${CX.btnPrimary} flex w-full cursor-pointer items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold sm:w-auto`}
+              >
                 <Trophy className="h-4 w-4" />
                 Browse tournaments
               </button>
@@ -158,11 +134,13 @@ export default function Home() {
           </div>
 
           {/* Stats strip */}
-          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-2xl bg-[#202126] sm:grid-cols-4">
+          <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-xl bg-[#202126] sm:mt-16 sm:grid-cols-4 sm:rounded-2xl">
             {STATS.map((s) => (
-              <div key={s.label} className="bg-[#0A0C0F] px-5 py-5 text-center">
-                <p className="font-['Rajdhani'] text-2xl font-bold sm:text-3xl">{s.value}</p>
-                <p className="mt-1 text-[11px] uppercase tracking-wide text-[#6C6D73]">{s.label}</p>
+              <div key={s.label} className="bg-[#0A0C0F] px-3 py-4 text-center sm:px-5 sm:py-5">
+                <p className="font-['Rajdhani'] text-xl font-bold sm:text-2xl lg:text-3xl">{s.value}</p>
+                <p className="mt-1 text-[10px] uppercase leading-tight tracking-wide text-[#6C6D73] sm:text-[11px]">
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
@@ -170,20 +148,20 @@ export default function Home() {
       </section>
 
       {/* ---------------- GAMES ---------------- */}
-      <section id="games" className="mx-auto max-w-7xl px-6 py-16">
-        <div className="mb-8 flex items-end justify-between">
+      <section id="games" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mb-6 flex items-end justify-between sm:mb-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A79FFF]">Supported titles</p>
-            <h2 className="mt-2 font-['Rajdhani'] text-3xl font-bold">Compete in the games you play</h2>
+            <h2 className="mt-2 font-['Rajdhani'] text-2xl font-bold sm:text-3xl">Compete in the games you play</h2>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {GAMES.map((g) => (
-            <div key={g.name} className={`${CX.card} group relative overflow-hidden p-5`}>
-              <p className="text-[10px] tracking-[0.15em] text-[#6C6D73]">{g.tag}</p>
-              <p className="mt-2 font-['Rajdhani'] text-xl font-bold">{g.name}</p>
-              <div className="mt-4 flex items-center gap-1 text-xs font-medium text-[#9A9AA3] transition-colors duration-150 group-hover:text-white">
+            <div key={g.name} className={`${CX.card} group relative overflow-hidden p-4 sm:p-5`}>
+              <p className="text-[9px] tracking-[0.12em] text-[#6C6D73] sm:text-[10px] sm:tracking-[0.15em]">{g.tag}</p>
+              <p className="mt-2 font-['Rajdhani'] text-lg font-bold sm:text-xl">{g.name}</p>
+              <div className="mt-3 flex items-center gap-1 text-xs font-medium text-[#9A9AA3] transition-colors duration-150 group-hover:text-white sm:mt-4">
                 View tournaments <ArrowRight className="h-3 w-3" />
               </div>
             </div>
@@ -193,11 +171,11 @@ export default function Home() {
 
       {/* ---------------- HOW IT WORKS ---------------- */}
       <section id="how-it-works" className="border-y border-[#202126] bg-[#0A0C0F]">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="mb-14 text-center">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
+          <div className="mb-10 text-center sm:mb-14">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A79FFF]">The loop</p>
-            <h2 className="mt-2 font-['Rajdhani'] text-3xl font-bold sm:text-4xl">From lobby to payout</h2>
-            <p className="mx-auto mt-3 max-w-md text-sm text-[#9A9AA3]">
+            <h2 className="mt-2 font-['Rajdhani'] text-2xl font-bold sm:text-3xl lg:text-4xl">From lobby to payout</h2>
+            <p className="mx-auto mt-3 max-w-md px-2 text-sm text-[#9A9AA3] sm:px-0">
               Three steps stand between you and a wallet top-up. No middlemen, no waiting on admins.
             </p>
           </div>
@@ -207,14 +185,14 @@ export default function Home() {
             {STEPS.map((s, i) => (
               <div key={s.n} className="relative">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[10px] border border-[#6B58D6]/30 bg-[#6B58D6]/10">
-                    <s.icon className="h-6 w-6 text-[#A79FFF]" strokeWidth={2} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] border border-[#6B58D6]/30 bg-[#6B58D6]/10 sm:h-14 sm:w-14">
+                    <s.icon className="h-5 w-5 text-[#A79FFF] sm:h-6 sm:w-6" strokeWidth={2} />
                   </div>
-                  <p className="font-['Rajdhani'] text-xs font-bold tracking-[0.25em] text-[#6C6D73]">
+                  <p className="font-['Rajdhani'] text-xs font-bold tracking-[0.2em] text-[#6C6D73] sm:tracking-[0.25em]">
                     STEP 0{i + 1} · {s.n}
                   </p>
                 </div>
-                <h3 className="mt-4 font-['Rajdhani'] text-xl font-bold">{s.title}</h3>
+                <h3 className="mt-4 font-['Rajdhani'] text-lg font-bold sm:text-xl">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#9A9AA3]">{s.desc}</p>
               </div>
             ))}
@@ -223,10 +201,10 @@ export default function Home() {
       </section>
 
       {/* ---------------- TRUST / LEADERBOARD TEASER ---------------- */}
-      <section id="leaderboard" className="mx-auto max-w-7xl px-6 py-20">
+      <section id="leaderboard" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A79FFF]">Fair play, always</p>
-          <h2 className="mt-2 font-['Rajdhani'] text-3xl font-bold sm:text-4xl">
+          <h2 className="mt-2 font-['Rajdhani'] text-2xl font-bold sm:text-3xl lg:text-4xl">
             Every match is verified.
             <br /> Every payout is guaranteed.
           </h2>
@@ -235,7 +213,7 @@ export default function Home() {
             dispute and our team resolves it within the hour — not the next business day.
           </p>
 
-          <div className="mt-8 grid grid-cols-2 gap-5">
+          <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
             {[
               { icon: ShieldCheck, title: "Anti-cheat checks", desc: "Every top finisher, screened" },
               { icon: Timer, title: "10-min payouts", desc: "From results to wallet" },
@@ -255,14 +233,17 @@ export default function Home() {
       </section>
 
       {/* ---------------- FINAL CTA ---------------- */}
-      <section className="relative mx-6 mb-6 overflow-hidden rounded-3xl border border-[#6B58D6]/25 bg-bg-[linear-gradient(135deg,#1C1D23,#0A0C0F)]-8 py-16 text-center sm:mx-auto sm:max-w-7xl">
+      <section className="relative mx-4 mb-4 overflow-hidden rounded-2xl border border-[#6B58D6]/25 bg-[linear-gradient(135deg,#1C1D23,#0A0C0F)] px-5 py-10 text-center sm:mx-6 sm:mb-6 sm:rounded-3xl sm:px-8 sm:py-16 lg:mx-auto lg:max-w-7xl">
         <div className={`pointer-events-none absolute inset-0 ${CX.gridFade}`} />
         <div className="relative">
-          <h2 className="font-['Rajdhani'] text-3xl font-bold sm:text-4xl">Your next W is one lobby away</h2>
+          <h2 className="font-['Rajdhani'] text-2xl font-bold sm:text-3xl lg:text-4xl">Your next W is one lobby away</h2>
           <p className="mx-auto mt-3 max-w-md text-sm text-[#9A9AA3]">
             Create your squad, pick a bracket, and drop in. Registration takes less time than a loading screen.
           </p>
-          <button onClick={() => router.push('/signin')} className={`${CX.btnPrimary} cursor-pointer mx-auto mt-7 flex items-center gap-2 px-8 py-3.5 text-sm font-semibold`}>
+          <button
+            onClick={() => router.push('/signin')}
+            className={`${CX.btnPrimary} mx-auto mt-6 flex w-full cursor-pointer items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold sm:mt-7 sm:w-fit`}
+          >
             <Trophy className="h-4 w-4" />
             Join your first tournament
           </button>
@@ -271,7 +252,7 @@ export default function Home() {
 
       {/* ---------------- FOOTER ---------------- */}
       <footer className="border-t border-[#202126]">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-center sm:flex-row sm:gap-4 sm:px-6 sm:py-8 sm:text-left">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#6B58D6]">
               <Swords className="h-3.5 w-3.5" strokeWidth={2.5} />

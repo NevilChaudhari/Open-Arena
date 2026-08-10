@@ -98,9 +98,9 @@ export default function AddTournamentUI({ games }: Props) {
 
             {/* Pop up */}
             {openAddGame && (<div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="flex bg-[#0A0C0F] w-100 h-100 items-center justify-center border border-[#2C292A] rounded-md">
+                <div className="flex bg-[#0A0C0F] w-[90vw] md:w-100 h-auto md:h-100 items-center justify-center border border-[#2C292A] rounded-md">
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                        <div className="w-105 rounded-xl border border-[#2C292A] bg-[#0A0C0F] p-6 shadow-xl">
+                        <div className="w-[90vw] md:w-105 rounded-xl border border-[#2C292A] bg-[#0A0C0F] p-5 md:p-6 shadow-xl">
 
                             {/* Header */}
                             <div className="mb-6 flex items-center justify-between">
@@ -138,32 +138,33 @@ export default function AddTournamentUI({ games }: Props) {
 
             {/* Header */}
             <div className="flex flex-col">
-                <span className="text-4xl font-semibold">Create Tournament</span>
-                <span className="text-md text-[#7E8190]">Setup your tournament details</span>
+                <span className="text-2xl md:text-4xl font-semibold">Create Tournament</span>
+                <span className="text-sm md:text-md text-[#7E8190]">Setup your tournament details</span>
             </div>
 
             {/* Basic Information */}
-            <div className="flex flex-col bg-[#16161C] border border-[#3F3E41] h-auto rounded-md p-5 gap-7">
+            <div className="flex flex-col bg-[#16161C] border border-[#3F3E41] h-auto rounded-md p-4 md:p-5 gap-5 md:gap-7">
+                <div onClick={addTournament} className='flex md:hidden w-full md:w-auto justify-center border border-[#3F3E41] hover:border-[#6B58D6] cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#6B58D6] hover:text-white'>Add Tournament<ArrowRightFromLine /></div>
                 <div className="flex flex-col gap-5">
                     {/* Header */}
-                    <div className="flex items-center place-content-between">
+                    <div className="flex flex-col md:flex-row md:items-center place-content-between gap-3 md:gap-0">
                         <div className="flex gap-5 items-center">
                             <span className="w-10 h-10 bg-[#6B58D6] rounded-full flex items-center justify-center">1</span>
                             <span className="flex items-center justify-center font-semibold text-xl">Basic Information</span>
                         </div>
-                        <div onClick={addTournament} className='flex border border-white hover:border-[#6B58D6] cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#6B58D6] hover:text-white'>Add Tournament<ArrowRightFromLine /></div>
+                        <div onClick={addTournament} className='md:flex hidden w-full md:w-auto justify-center border border-[#3F3E41] hover:border-[#6B58D6] cursor-pointer h-12 items-center rounded-md px-3 gap-3 font-semibold hover:bg-[#6B58D6] hover:text-white'>Add Tournament<ArrowRightFromLine /></div>
                     </div>
-                    <div className="flex gap-10">
+                    <div className="flex flex-col md:flex-row gap-5 md:gap-10">
                         {/* Tournament Name */}
                         <div className="flex flex-col gap-1">
                             <span className="text-[#9A9AA3]">Tournament Name</span>
-                            <input value={gameName} onChange={(e) => setGameName(e.target.value)} type="text" className="border border-[#2C292A] bg-[#111217] px-2 h-12 w-100 rounded-md" placeholder="Enter Tournament Name" />
+                            <input value={gameName} onChange={(e) => setGameName(e.target.value)} type="text" className="border border-[#2C292A] bg-[#111217] px-2 h-12 w-full md:w-100 rounded-md" placeholder="Enter Tournament Name" />
                         </div>
 
                         {/* Tournament Game */}
                         <div className="flex flex-col gap-1">
                             <span className="text-[#9A9AA3]">Game</span>
-                            <div className="relative w-105">
+                            <div className="relative w-full md:w-105">
                                 {/* Button */}
                                 <div onClick={() => setOpenGamesDropdown(!openGamesDropdown)} className="flex w-full items-center justify-between rounded-lg border border-[#2C292A] bg-[#111217] px-3 h-12" >
                                     <div className="flex items-center gap-3">
@@ -199,7 +200,7 @@ export default function AddTournamentUI({ games }: Props) {
                     {/* Tournament Type */}
                     <div className="flex flex-col gap-1">
                         <span className="text-[#9A9AA3]">Tournament Type</span>
-                        <div className="w-full flex gap-5 justify-between">
+                        <div className="w-full flex gap-2 md:gap-5 justify-between">
                             <div onClick={() => setTeamSize('solo')} className={`cursor-pointer flex h-12 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'solo' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><User /> Solo</p></div>
                             <div onClick={() => setTeamSize('duo')} className={`cursor-pointer flex h-12 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'duo' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><Users /> Duo</p></div>
                             <div onClick={() => setTeamSize('squad')} className={`cursor-pointer flex h-12 w-full items-center justify-center gap-2 bg-[#111217] rounded-md border transition-all ${teamSize === 'squad' ? ' border-[#6B58D6] text-white' : 'border-[#2C292A] text-[#9A9AA3]'}`}><p className="flex gap-2 "><Users /> Squad</p></div>
@@ -238,7 +239,7 @@ export default function AddTournamentUI({ games }: Props) {
                         {/* Mode */}
                         <div className="flex flex-col gap-1">
                             <span className="text-[#9A9AA3]">Mode</span>
-                            <div className="relative w-105">
+                            <div className="relative w-full">
                                 {/* Button */}
                                 <div onClick={() => setOpenGameModeDropdown(!openGameModeDropdown)} className="flex w-full items-center justify-between rounded-lg border border-[#2C292A] bg-[#111217] px-3 h-12" >
                                     <div className="flex items-center gap-3">
@@ -263,7 +264,7 @@ export default function AddTournamentUI({ games }: Props) {
                         {/* Map */}
                         <div className="flex flex-col gap-1">
                             <span className="text-[#9A9AA3]">Map</span>
-                            <div className="relative w-105">
+                            <div className="relative w-full">
                                 {/* Button */}
                                 <div onClick={() => setOpenGameMapDropdown(!openGameMapDropdown)} className="flex w-full items-center justify-between rounded-lg border border-[#2C292A] bg-[#111217] px-3 h-12" >
                                     <div className="flex items-center gap-3">

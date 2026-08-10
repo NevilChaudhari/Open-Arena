@@ -45,7 +45,7 @@ export default function Login() {
             password: password,
         })
 
-        if (error){
+        if (error) {
             console.log(`signin error: ${error}`)
             setError(`* ${error.message} *`)
         };
@@ -54,11 +54,11 @@ export default function Login() {
     }
 
     return (
-        <main className="h-screen overflow-hidden bg-[#09090B] bg-[url('/signup.png')] bg-cover text-white">
-            <div className="flex h-full items-center justify-between px-10 py-6">
+        <main className="h-screen md:overflow-hidden overflow-y-auto bg-[#09090B] md:bg-[url('/signup.png')] bg-cover text-white">
+            <div className="flex flex-col md:flex-row min-h-screen md:h-full overflow-y-auto items-center justify-between px-4 py-8 gap-8 md:px-10 md:py-6">
 
                 {/* LEFT */}
-                <div className="flex h-full w-1/2 flex-col justify-between py-2">
+                <div className="hidden md:flex h-full w-1/2 flex-col justify-between py-2">
 
                     {/* Logo */}
                     <div className="flex items-center gap-3">
@@ -100,8 +100,17 @@ export default function Login() {
                     </div>
                 </div>
 
+                <div className="flex items-center gap-2.5 md:hidden">
+                    <Image src="/logo.png" width={36} height={36} alt="" />
+                    <div>
+                        <h2 className="text-sm font-bold tracking-wide">OPEN ARENA</h2>
+                        <p className="text-[9px] tracking-[0.3em] text-violet-500">TOURNAMENTS</p>
+                    </div>
+                </div>
+
                 {/* RIGHT */}
-                <div className="flex w-1/2 justify-center">
+                <div className="flex items-center  md:w-1/2 w-full md:justify-center">
+
 
                     <div className="w-full max-w-130 rounded-3xl border border-white/10 bg-white/4 p-8 backdrop-blur-xl">
 
@@ -124,7 +133,7 @@ export default function Login() {
 
                         {/* OAuth */}
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col md:grid grid-cols-2 gap-3">
 
                             <button className="flex h-11 text-sm items-center justify-center gap-2 rounded-xl border border-white/10 hover:bg-white/5">
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { BadgeCheck, Check, ChevronRight, CircleQuestionMark, CircleStar, Gamepad2, Gift, House, Paintbrush, Podium, Trophy, Users, Wallet } from "lucide-react";
+import { BadgeCheck, Check, ChevronRight, CircleQuestionMark, CircleStar, Gamepad2, Gift, House, Paintbrush, Podium, ShieldCheck, Trophy, Users, Wallet } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -25,15 +25,14 @@ export default function Sidebar({ user, isAdmin }: Props) {
         { name: "Teams", href: "/teams", icon: Users },
         { name: "Leaderboard", href: "/leaderboard", icon: Podium },
         { name: "Wallet", href: "/wallet", icon: Wallet },
-        { name: "Color Codes", href: "/colorcodes", icon: Paintbrush },
     ];
 
     const adminPages = [
-        { name: "Add Tournaments", href: "/addTournaments", icon: Trophy },
+        { name: "Admin Pannel", href: "/admin", icon: ShieldCheck },
     ];
 
     return (
-        <div className="border-r-2 p-5 border-[#2A2B2D] h-screen max-w-1/6 min-w-1/6 flex flex-col overflow-hidden">
+        <div className="border-r-2 p-5 border-[#2A2B2D] h-screen max-w-1/6 min-w-1/6 hidden flex-col overflow-hidden md:flex">
             <div className="flex flex-col flex-1 min-h-0">
                 {/* Logo */}
                 <div className="flex items-center gap-3">

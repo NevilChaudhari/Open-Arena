@@ -1,7 +1,7 @@
 'use client'
 
 import TournamentCard from "@/Components/tournamentCard";
-import { Bell, ChevronRight, Mail, Search } from "lucide-react";
+import { Bell, ChevronRight, Mail, Menu, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import WIP from "@/Components/WIP";
@@ -17,7 +17,7 @@ interface Tournaments {
     map: string,
     maxPlayers: string,
     entryFee: string,
-    pricePool: string,
+    prizePool: string,
     perKill: string,
 }
 
@@ -29,18 +29,11 @@ export default function HomeUI({ tournaments }: Props) {
 
     return (
         <div className="flex flex-col w-full h-full gap-5 overflow-hidden">
-            {/* Left Part */}
             <div className="flex flex-col gap-10 w-full overflow-y-auto scrollbar-none overflow-x-hidden">
                 {/* Navbar */}
-                <div className="flex w-full place-content-between items-center">
-                    {/* Searchbox */}
-                    <div className="flex bg-[#202124] border border-[#44454A] h-13 w-100 gap-2 items-center rounded-md px-2">
-                        <Search className="text-[#7E8190]" size={20} />
-                        <input type="text" placeholder="Search" className="w-full h-full focus:outline-0" />
-                    </div>
-
+                <div className="flex w-full place-content-end items-center">
                     {/* icons */}
-                    <div className="flex gap-5">
+                    <div className="md:flex hidden gap-5">
                         <div className="flex hover:bg-[#1D1E20] hover:text-white w-12 h-12 items-center justify-center rounded-full cursor-pointer text-[#7E8190]"><Bell /></div>
                         <div className="flex hover:bg-[#1D1E20] hover:text-white w-12 h-12 items-center justify-center rounded-full cursor-pointer text-[#7E8190]"><Mail /></div>
                     </div>
@@ -71,7 +64,7 @@ export default function HomeUI({ tournaments }: Props) {
                         <span onClick={() => router.push('/tournaments')} className="text-[#A79FFF] text-sm hover:underline cursor-pointer">View All</span>
                     </div>
 
-                    <div className="rounded-xl border border-[#343539] bg-[#171819] min-h-max max-h-100 overflow-x-auto">
+                    <div className="rounded-xl md:flex flex-col hidden border border-[#343539] bg-[#171819] min-h-max max-h-100 overflow-x-auto">
                         <table className="min-w-full">
                             <thead className="border-b border-[#343539] text-xs uppercase tracking-wider text-[#7E8190]">
                                 <tr>
@@ -86,9 +79,13 @@ export default function HomeUI({ tournaments }: Props) {
                             </thead>
 
                             <tbody>
-                                {tournaments.map((tournament) => {
+                                {tournaments.map((tournament, i) => {
+                                    const d = intervalToDuration({
+                                        start: new Date(),
+                                        end: new Date(tournament.registrationEnds),
+                                    });
                                     return (
-                                        <tr key={tournament.id} className="border-b border-zinc-800 hover:bg-white/5">
+                                        i < 2 && (<tr key={tournament.id} className="border-b border-zinc-800 hover:bg-white/5">
                                             {/* Tournament */}
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center gap-3">
@@ -117,16 +114,10 @@ export default function HomeUI({ tournaments }: Props) {
                                             <td className="px-5 py-4 font-medium text-white">₹{tournament.perKill}</td>
 
                                             {/* Prize Pool */}
-                                            <td className="px-5 py-4 font-medium text-white">₹{tournament.pricePool}</td>
+                                            <td className="px-5 py-4 font-medium text-white">₹{tournament.prizePool}</td>
 
                                             {/* Starts */}
-                                            <td className="px-5 py-4 text-[#9A9AA3]"> {(() => {
-                                                const d = intervalToDuration({
-                                                    start: new Date(),
-                                                    end: new Date(tournament.registrationEnds),
-                                                });
-                                                return `${d.days ?? 0}d ${d.hours ?? 0}h ${d.minutes ?? 0}m`;
-                                            })()} </td>
+                                            <td className="px-5 py-4 text-[#9A9AA3]"> {`${d.days ?? 0}d ${d.hours ?? 0}h ${d.minutes ?? 0}m`} </td>
 
                                             {/* Entry Fee */}
                                             <td className="px-5 py-4 text-white">₹{tournament.entryFee}</td>
@@ -137,11 +128,50 @@ export default function HomeUI({ tournaments }: Props) {
                                                     <ChevronRight size={18} />
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr>)
                                     )
                                 })}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="flex md:hidden flex-col gap-3">
+                        {tournaments.map((tournament, i) => {
+                            const d = intervalToDuration({
+                                start: new Date(),
+                                end: new Date(tournament.registrationEnds),
+                            });
+                            return (
+                                i < 2 && (<div key={tournament.id} onClick={() => router.push(`/tournaments/${tournament.id}`)} className="flex cursor-pointer flex-col gap-3 rounded-xl border border-[#343539] bg-[#171819] p-4 active:bg-white/5" >
+                                    <Image src="/Valorant.jpg" alt="Valorant" width={500} height={500} className="shrink-0 rounded-lg object-cover" />
+                                    <div className="flex items-center gap-3">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-xl font-medium text-white">{tournament.name}</p>
+                                            <p className="text-sm text-zinc-400">Open to All · {tournament.game}</p>
+                                        </div>
+                                        <ChevronRight size={25} className="shrink-0 text-[#9A9AA3]" />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md bg-[#202126] md:grid-cols-4">
+                                        <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                            <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Per Kill</p>
+                                            <p className="text-xl font-semibold">₹{tournament.perKill}</p>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                            <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Prize Pool</p>
+                                            <p className="text-xl font-semibold">₹{tournament.prizePool}</p>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                            <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Starts In</p>
+                                            <p className="text-xl font-semibold">{`${d.days ?? 0}d ${d.hours ?? 0}h ${d.minutes ?? 0}m`}</p>
+                                        </div>
+                                        <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
+                                            <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Entry Fee</p>
+                                            <p className="text-xl font-semibold">₹{tournament.entryFee}</p>
+                                        </div>
+                                    </div>
+                                </div>)
+                            )
+                        })}
                     </div>
                 </div>
             </div>

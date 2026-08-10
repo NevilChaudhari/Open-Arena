@@ -116,38 +116,38 @@ export default function WalletUI({ user, TransactionData }: Props) {
     }, [TransactionData])
 
     return (
-        <div className="flex flex-col gap-10 w-full h-full">
+        <div className="flex flex-col w-full h-full gap-5 overflow-hidden overflow-y-auto">
             <Script
                 src="https://checkout.razorpay.com/v1/checkout.js"
                 strategy="afterInteractive"
             />
             {/* Header */}
             < div className="flex flex-col" >
-                <span className="text-4xl font-semibold">Wallet</span>
-                <span className="text-md text-[#7E8190]">Manage your balance, transactions, and payouts</span>
+                <span className="text-2xl md:text-4xl font-semibold">Wallet</span>
+                <span className="text-sm md:text-md text-[#A79FFF]">Manage your balance, transactions, and payouts</span>
             </div >
-            <div className="flex w-full h-full gap-3">
+            <div className="flex md:flex-row flex-col w-full h-full gap-3">
 
                 {/* Left Part */}
                 <div className="flex flex-col w-full min-h-max gap-5 ">
 
                     {/* Profile Card */}
                     <div className="flex gap-10 place-content-between items-end p-10 w-full h-auto bg-[#16161C]/70 rounded-md border border-[#2C292A]">
-                        <div className="flex gap-50">
+                        <div className="flex md:flex-row flex-col gap-10 items-center justify-center md:place-content-between w-full">
                             {/* Balance */}
                             <div className="flex flex-col gap-5">
                                 <span className="text-md text-[#7E8190]">Total Balance</span>
                                 <span className="text-5xl font-semibold flex gap-2 items-center">₹{user.coins}</span>
                             </div>
 
-                            <div className="flex flex-col gap-3">
-                                <div onClick={() => payNow()} className="flex w-50 h-15 items-center justify-center gap-3 rounded-md border border-[#2C292A] cursor-pointer hover:bg-[#5b4bff]"><Plus />Add Coins</div>
-                                <div className="flex w-50 h-15 items-center justify-center gap-3 rounded-md border border-[#2C292A] cursor-pointer hover:bg-[#5b4bff]"><ArrowUpFromLine />Withdraw</div>
+                            <div className="flex md:flex-col gap-3">
+                                <div onClick={() => payNow()} className="flex md:w-50 w-40 h-15 items-center justify-center gap-3 rounded-md border border-[#2C292A] cursor-pointer hover:bg-[#5b4bff]"><Plus />Add Coins</div>
+                                <div className="flex md:w-50 w-40 h-15 items-center justify-center gap-3 rounded-md border border-[#2C292A] cursor-pointer hover:bg-[#5b4bff]"><ArrowUpFromLine />Withdraw</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex gap-10">
+                    <div className="flex md:flex-row flex-col gap-2 md:gap-10">
                         {/* Card 1 */}
                         <div className="flex gap-10 items-center p-5 w-auto h-auto bg-[#16161C]/70 rounded-md border border-[#2C292A]">
                             <div className="flex gap-5">
@@ -176,7 +176,7 @@ export default function WalletUI({ user, TransactionData }: Props) {
                 </div>
 
                 {/* Right Part */}
-                <div className="min-w-[30%] max-h-max overflow-y-auto overflow-hidden place-content-between flex flex-col gap-5 w-full flex-1 rounded-md bg-[#16161C]/70 border border-[#2C292A] p-3">
+                <div className="min-w-[30%] md:max-h-min md:min-h-max min-h-max overflow-y-auto overflow-hidden place-content-between flex flex-col gap-5 w-full flex-1 rounded-md bg-[#16161C]/70 border border-[#2C292A] p-3">
                     {/* Header */}
                     <div className="flex items-center place-content-between w-full h-10">
                         <span className="text-md">Recent Transactions</span>
