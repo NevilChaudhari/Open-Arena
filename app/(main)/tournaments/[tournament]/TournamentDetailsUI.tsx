@@ -228,7 +228,7 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                             <span className="mt-2 text-xs text-[#6C6D73]">{(tournamentDetails.maxPlayers - tournamentPlayers.length)} slots remaining · closes automatically when full</span>
                         </div>
 
-                        {(!tournamentDetails.roomId || !tournamentDetails.roomPassword || !hasJoined) && (<div className="flex items-start gap-3 rounded-2xl border border-[#F59E0B]/30 bg-[#F59E0B]/8 p-4">
+                        {(!tournamentDetails.roomId || !tournamentDetails.roomPassword || !hasJoined || isRegistrationOpen) && (<div className="flex items-start gap-3 rounded-2xl border border-[#F59E0B]/30 bg-[#F59E0B]/8 p-4">
                             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#F59E0B]" />
                             <span className="text-sm text-[#C8C8D0]">
                                 Room ID and password unlock on your dashboard automatically 10 minutes before
@@ -236,7 +236,7 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                             </span>
                         </div>)}
 
-                        {tournamentDetails.roomId && tournamentDetails.roomPassword && hasJoined && (
+                        {tournamentDetails.roomId && tournamentDetails.roomPassword && hasJoined && !isRegistrationOpen && (
                             <div className="bg-[#16161C] border border-[#2C292A] rounded-2xl p-4 md:p-5">
                                 <h3 className="text-white font-semibold mb-4">Room Details</h3>
 
