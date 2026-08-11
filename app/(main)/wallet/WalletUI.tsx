@@ -5,6 +5,11 @@ import { format, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+<Script
+    src="https://checkout.razorpay.com/v1/checkout.js"
+    strategy="beforeInteractive"
+/>
+
 interface User {
     id: string,
     username: string,
@@ -14,7 +19,7 @@ interface User {
 interface TransactionData {
     orderId: string,
     paymentId: string,
-    ammount: number,
+    amount: number,
     userId: string,
     created_at: string
 }
@@ -41,6 +46,32 @@ export default function WalletUI({ user, TransactionData }: Props) {
             name: "OpenArena",
             description: "Add Money",
             order_id: order.id,
+            method: {
+                upi: true,
+                card: true,
+                netbanking: true,
+                wallet: true,
+            },
+
+            config: {
+                display: {
+                    blocks: {
+                        upi: {
+                            name: "Pay using UPI",
+                            instruments: [
+                                {
+                                    method: "upi",
+                                    flows: ["collect"],
+                                },
+                            ],
+                        },
+                    },
+                    sequence: ["block.upi"],
+                    preferences: {
+                        show_default_blocks: false,
+                    },
+                },
+            },
 
             handler: async function (response: any) {
                 const verify = await fetch("/api/transactions/verifyPayment/", {
@@ -67,7 +98,7 @@ export default function WalletUI({ user, TransactionData }: Props) {
                     body: JSON.stringify({
                         orderId: response.razorpay_order_id,
                         paymentId: response.razorpay_payment_id,
-                        ammount: 500,
+                        amount: 500,
                         userId: user.id,
                     }),
                 });
@@ -111,16 +142,12 @@ export default function WalletUI({ user, TransactionData }: Props) {
     useEffect(() => {
         setTotalDeposits(0);
         TransactionData.forEach(transaction => {
-            setTotalDeposits(totalDeposits + transaction.ammount)
+            setTotalDeposits(totalDeposits + transaction.amount)
         });
     }, [TransactionData])
 
     return (
         <div className="flex flex-col w-full h-full gap-5 overflow-hidden overflow-y-auto">
-            <Script
-                src="https://checkout.razorpay.com/v1/checkout.js"
-                strategy="afterInteractive"
-            />
             {/* Header */}
             < div className="flex flex-col" >
                 <span className="text-2xl md:text-4xl font-semibold">Wallet</span>
@@ -195,7 +222,7 @@ export default function WalletUI({ user, TransactionData }: Props) {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-1 text-[#22C55E] text-md items-center"><Plus size={15} />₹{transaction.ammount}</div>
+                                <div className="flex gap-1 text-[#22C55E] text-md items-center"><Plus size={15} />₹{transaction.amount}</div>
                             </div>
                         )
                     })}

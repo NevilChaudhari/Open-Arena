@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import TournamentDetails from "./TournamentDetails";
+import TournamentDetailsUI from "./TournamentDetailsUI";
 
 export default async function TournamentDetailsData({ params }: { params: Promise<{ tournament: string }>; }) {
     const supabase = await createClient();
@@ -27,5 +27,5 @@ export default async function TournamentDetailsData({ params }: { params: Promis
         );
     }
 
-    return <TournamentDetails tournamentDetails={tournamentDetails} user={userData} tournamentPlayers={tournamentPlayers ? tournamentPlayers : []} />;
+    return <TournamentDetailsUI tournamentDetails={tournamentDetails} user={userData} tournamentPlayers={tournamentPlayers ? tournamentPlayers : []} />;
 }

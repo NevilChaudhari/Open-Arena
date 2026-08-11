@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const { error } = await supabase.from('transactions').insert({
         orderId: body.orderId,
         paymentId: body.paymentId,
-        ammount: body.ammount,
+        amount: body.amount,
         userId: body.userId,
     })
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     }
 
 
-    const { error: updateError } = await supabase.from("users").update({ "coins": (user.coins + body.ammount) }).eq("id", body.userId);
+    const { error: updateError } = await supabase.from("users").update({ "coins": (user.coins + body.amount) }).eq("id", body.userId);
 
     if (updateError) {
         console.log(updateError.message);

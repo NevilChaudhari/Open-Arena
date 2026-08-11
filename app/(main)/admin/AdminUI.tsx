@@ -26,17 +26,17 @@ const ACTIONS: AdminAction[] = [
     {
         name: "Add Tournament",
         description: "Create a new tournament with rules, prize pool, and slots.",
-        href: "/addTournaments",
+        href: "admin/addTournaments",
         icon: Plus,
         accent: "#6B58D6",
     },
     {
         name: "Manage Tournaments",
         description: "Edit, close registration, or cancel existing tournaments.",
-        href: "/admin/tournaments",
+        href: "/admin/manageTournaments",
         icon: Trophy,
         accent: "#F2A93B",
-        soon: true,
+        soon: false,
     },
     {
         name: "Manage Games",

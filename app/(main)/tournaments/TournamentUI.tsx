@@ -34,6 +34,7 @@ type CategoryFilter = 'All' | 'Upcoming' | 'Live Now' | 'Completed'
 
 export default function TournamentUI({ tournaments, tournamentPlayers }: Props) {
     const router = useRouter();
+    const isRegistrationOpen = (tournament: Tournaments) => new Date(tournament.registrationEnds) > new Date();
     const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('All')
     return (
         <div className="flex flex-col w-full h-full gap-5 overflow-hidden">
@@ -81,6 +82,7 @@ export default function TournamentUI({ tournaments, tournamentPlayers }: Props) 
 
                         <tbody>
                             {tournaments.map((tournament) => {
+                                const open = isRegistrationOpen(tournament);
                                 return (
                                     <tr key={tournament.id} className="border-b border-zinc-800 hover:bg-white/5">
                                         {/* Tournament */}
@@ -132,8 +134,8 @@ export default function TournamentUI({ tournaments, tournamentPlayers }: Props) 
 
                                         {/* Status */}
                                         <td className="px-3 py-3 lg:px-5 lg:py-4">
-                                            <span className="rounded-md bg-[#22C55E]/20 px-3 py-2 text-sm font-medium text-[#22C55E] whitespace-nowrap">
-                                                Registration Open
+                                            <span className={`rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap ${open ? "bg-[#22C55E]/20 text-[#22C55E]" : "bg-[#EF4444]/20 text-[#EF4444]"}`}>
+                                                {open ? "Registration Open" : "Registration Closed"}
                                             </span>
                                         </td>
 
@@ -156,6 +158,7 @@ export default function TournamentUI({ tournaments, tournamentPlayers }: Props) 
                             start: new Date(),
                             end: new Date(tournament.registrationEnds),
                         });
+                        const open = isRegistrationOpen(tournament);
                         return (
                             <div key={tournament.id} onClick={() => router.push(`/tournaments/${tournament.id}`)} className="flex cursor-pointer flex-col gap-3 rounded-xl border border-[#343539] bg-[#171819] p-4 active:bg-white/5" >
                                 <Image src="/Valorant.jpg" alt="Valorant" width={500} height={500} className="shrink-0 rounded-lg object-cover" />
@@ -164,7 +167,9 @@ export default function TournamentUI({ tournaments, tournamentPlayers }: Props) 
                                         <p className="truncate text-xl font-medium text-white">{tournament.name}</p>
                                         <p className="text-sm text-zinc-400">Open to All · {tournament.game}</p>
                                     </div>
-                                    <ChevronRight size={25} className="shrink-0 text-[#9A9AA3]" />
+                                    <span className={`rounded-md px-2.5 py-1.5 text-xs font-medium whitespace-nowrap ${open ? "bg-[#22C55E]/20 text-[#22C55E]" : "bg-[#EF4444]/20 text-[#EF4444]"}`}>
+                                        {open ? "Open" : "Closed"}
+                                    </span>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md bg-[#202126] md:grid-cols-4">

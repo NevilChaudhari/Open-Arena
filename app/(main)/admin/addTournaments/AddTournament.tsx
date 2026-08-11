@@ -158,7 +158,7 @@ export default function AddTournamentUI({ games }: Props) {
                         {/* Tournament Name */}
                         <div className="flex flex-col gap-1">
                             <span className="text-[#9A9AA3]">Tournament Name</span>
-                            <input value={gameName} onChange={(e) => setGameName(e.target.value)} type="text" className="border border-[#2C292A] bg-[#111217] px-2 h-12 w-full md:w-100 rounded-md" placeholder="Enter Tournament Name" />
+                            <input value={gameName} onChange={(e) => setGameName(e.target.value)} type="text" className="no-spinner h-12 w-100 rounded-md border border-[#2C292A] bg-[#111217] px-4 text-white placeholder:text-[#73788A] outline-none focus:border-[#6B58D6]" placeholder="Enter Tournament Name" />
                         </div>
 
                         {/* Tournament Game */}
