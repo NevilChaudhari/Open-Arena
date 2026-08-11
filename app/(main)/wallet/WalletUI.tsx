@@ -48,26 +48,6 @@ export default function WalletUI({ user, TransactionData }: Props) {
                 wallet: true,
             },
 
-            config: {
-                display: {
-                    blocks: {
-                        upi: {
-                            name: "Pay using UPI",
-                            instruments: [
-                                {
-                                    method: "upi",
-                                    flows: ["collect"],
-                                },
-                            ],
-                        },
-                    },
-                    sequence: ["block.upi"],
-                    preferences: {
-                        show_default_blocks: false,
-                    },
-                },
-            },
-
             handler: async function (response: any) {
                 const verify = await fetch("/api/transactions/verifyPayment/", {
                     method: "POST",
