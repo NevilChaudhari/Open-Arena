@@ -5,11 +5,6 @@ import { format, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-<Script
-    src="https://checkout.razorpay.com/v1/checkout.js"
-    strategy="beforeInteractive"
-/>
-
 interface User {
     id: string,
     username: string,
@@ -148,6 +143,11 @@ export default function WalletUI({ user, TransactionData }: Props) {
 
     return (
         <div className="flex flex-col w-full h-full gap-5 overflow-hidden overflow-y-auto">
+            
+<Script
+    src="https://checkout.razorpay.com/v1/checkout.js"
+    strategy="beforeInteractive"
+/>
             {/* Header */}
             < div className="flex flex-col" >
                 <span className="text-2xl md:text-4xl font-semibold">Wallet</span>

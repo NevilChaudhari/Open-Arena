@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import AddTournamentUI from "./AddTournament";
+import AddTournamentUI from "./AddTournamentUI";
 import { redirect } from "next/navigation";
 
 export default async function addGames() {
