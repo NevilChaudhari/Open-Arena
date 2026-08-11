@@ -1,7 +1,7 @@
 'use client'
 
 import TournamentCard from "@/Components/tournamentCard";
-import { Bell, ChevronDown, ChevronRight, Gamepad2, ListFilterPlus, Mail, Search } from "lucide-react";
+import { ChevronDown, ChevronRight, Gamepad2, ListFilterPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";

@@ -1,13 +1,7 @@
-import BottomNavbar from "@/Components/BottomNavbar";
 import Navbar from "@/Components/Navbar";
-import Sidebar from "@/Components/sidebar";
 import { createClient } from "@/lib/supabase/server";
-
-interface User {
-    id: string,
-    username: string,
-    coins: number
-}
+import SidebarData from "./SidebarData";
+import BottomNavbarData from "./BottombarData";
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     const supabase = await createClient();
@@ -22,8 +16,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return (
         <div className="h-screen w-screen flex overflow-hidden bg-[#080909] text-white">
             <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-            <Sidebar user={userData} isAdmin={isAdmin} />
-            <BottomNavbar isAdmin={isAdmin} />
+            <SidebarData />
+            <BottomNavbarData />
             <Navbar />
 
             <main className="flex-1 md:p-5 p-1 overflow-hidden my-17 md:my-0">

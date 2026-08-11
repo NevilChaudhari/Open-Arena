@@ -1,29 +1,7 @@
-'use client'
+import { Skeleton } from "@/Components/ui/skeleton";
+import { BadgeCheck, MapPin, Calendar, PenLine, SquareArrowRightExit } from "lucide-react";
 
-import { createClient } from "@/lib/supabase/client";
-import { BadgeCheck, Calendar, MapPin, PenLine, SquareArrowRightExit } from "lucide-react";
-import { useRouter } from "next/navigation";
-
-interface User {
-    id: string,
-    username: string,
-    coins: number
-}
-interface Props {
-    user: User | null
-}
-
-
-export default function ProfileUI({ user }: Props) {
-    const supabase = createClient()
-    const router = useRouter()
-
-    const signOut = () => {
-        supabase.auth.signOut();
-
-        router.push('/')
-    }
-
+export default function ProfileSkeleton() {
     return (
         <div className="flex w-full h-full">
             <div className="flex flex-col p-4 md:p-5 w-full h-full gap-6 md:gap-10">
@@ -41,7 +19,7 @@ export default function ProfileUI({ user }: Props) {
                         <div className="flex flex-col gap-4 md:gap-5 items-center md:items-start">
                             {/* Username */}
                             <div className="flex gap-2 items-center justify-center md:justify-start">
-                                <span className="text-3xl md:text-5xl font-semibold">{user?.username}</span>
+                                <span className="text-3xl md:text-5xl font-semibold"><Skeleton className="min-w-50 h-10 bg-zinc-800 animate-pulse" /></span>
                                 <div className="flex items-center justify-center text-[#A79FFF]"><BadgeCheck size={50} /></div>
                             </div>
 
@@ -65,7 +43,7 @@ export default function ProfileUI({ user }: Props) {
 
                     <div className="flex flex-col gap-2 w-full md:w-auto">
                         <div className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#452FBC] cursor-pointer hover:bg-[#452FBC]/30 px-5 py-2 rounded-md text-[#452FBC] w-full md:w-auto"><PenLine size={20} />Edit Profile</div>
-                        <div onClick={signOut} className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#EF4444] cursor-pointer hover:bg-[#EF4444]/30 px-5 py-2 rounded-md text-[#EF4444] w-full md:w-auto"><SquareArrowRightExit size={20} />Log Out</div>
+                        <div className="flex gap-5 items-center justify-center bg-[#1C1D23] border border-[#EF4444] cursor-pointer hover:bg-[#EF4444]/30 px-5 py-2 rounded-md text-[#EF4444] w-full md:w-auto"><SquareArrowRightExit size={20} />Log Out</div>
                     </div>
                 </div>
             </div>
