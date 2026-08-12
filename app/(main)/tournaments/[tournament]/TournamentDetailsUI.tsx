@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Gamepad2, ShieldCheck, Crosshair, Copy, X, Check, LogOut, } from "lucide-react";
+import { Gamepad2, ShieldCheck, Crosshair, Copy, X, Check, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface TournamentDetails {
@@ -64,41 +64,95 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
     let [isJoining, setIsJoining] = useState(false);
     const [copied, setCopied] = useState("");
 
+    const [inGameName, setInGameName] = useState("");
+    const [inGameId, setInGameId] = useState("");
+    const [formError, setFormError] = useState("");
+
+    const openJoinPopup = () => {
+        if (!canJoin || isJoining || !isRegistrationOpen) return;
+        setFormError("");
+        setInGameName("");
+        setInGameId("");
+        setJoinPopUp(true);
+    };
+
+    const closeJoinPopup = () => {
+        if (isJoining) return;
+        setJoinPopUp(false);
+    };
+
+    const validateForm = () => {
+        const name = inGameName.trim();
+        const id = inGameId.trim();
+
+        if (!name) return "In-game name is required.";
+        if (name.length > 30) return "In-game name is too long.";
+        if (!id) return "In-game ID is required.";
+        if (!/^\d{6,15}$/.test(id)) return "In-game ID should be 6–15 digits.";
+
+        return "";
+    };
+
     const joinTournament = async () => {
+        const error = validateForm();
+        if (error) {
+            setFormError(error);
+            return;
+        }
+
         if (user.coins < tournamentDetails.entryFee) {
+            setFormError("You don't have enough coins to join.");
             return;
         }
+
         setIsJoining(true);
-        const res = await fetch('/api/tournament/join', {
-            method: "POST",
-            body: JSON.stringify({
-                playerId: user.id,
-                tournamentId: tournamentDetails.id
+        setFormError("");
+
+        try {
+            const res = await fetch('/api/tournament/join', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    playerId: user.id,
+                    tournamentId: tournamentDetails.id,
+                    inGameName: inGameName.trim(),
+                    inGameId: inGameId.trim(),
+                })
             })
-        })
 
-        const data = await res.json()
+            const data = await res.json()
 
-        if (data.error) {
-            console.log(`tournament joining error: ${data.error}`);
-            return;
+            if (data.error) {
+                console.log(`tournament joining error: ${data.error}`);
+                setFormError(data.error);
+                setIsJoining(false);
+                return;
+            }
+
+            const resa = await fetch('/api/transactions/updateData', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ammount: tournamentDetails.entryFee,
+                    userId: user.id
+                })
+            })
+
+            setJoinPopUp(false);
+            router.refresh()
+        } catch (err) {
+            console.log(`tournament joining error: ${err}`);
+            setFormError("Something went wrong. Please try again.");
+        } finally {
+            setIsJoining(false);
         }
-
-        const resa = await fetch('/api/transactions/updateData', {
-            method: "POST",
-            body: JSON.stringify({
-                ammount: tournamentDetails.entryFee,
-                userId: user.id
-            })
-        })
-
-        router.refresh()
     }
 
     const leaveTournament = async () => {
         if (!hasJoined) return;
         const res = await fetch('/api/tournament/leave', {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 tournamentId: tournamentDetails.id,
                 playerId: user.id,
@@ -128,7 +182,10 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                 <div className="flex flex-col gap-5 justify-center w-full">
                     <div className="flex items-start justify-between gap-3">
                         <h1 className="mt-3 flex-1 min-w-0 wrap-break-word text-2xl font-bold leading-tight md:text-4xl">{tournamentDetails.name}</h1>
-                        <div onClick={hasJoined ? leaveTournament : canJoin && !isJoining && isRegistrationOpen ? joinTournament : undefined} className={`flex md:hidden items-center justify-center rounded-[10px] text-xl font-semibold w-25 py-2 text-center transition-all duration-200 border group ${hasJoined ? 'cursor-pointer text-white bg-[#EF4444] border-[#EF4444]' : canJoin && !isJoining && isRegistrationOpen ? 'cursor-pointer bg-[#6B58D6] hover:bg-[#6B58D6]/80 border-[#2C292A] text-white' : 'bg-[#EF4444]/10 border-[#EF4444]/30 text-[#EF4444] cursor-not-allowed'}`} >
+                        <div
+                            onClick={hasJoined ? leaveTournament : openJoinPopup}
+                            className={`flex md:hidden items-center justify-center rounded-[10px] text-xl font-semibold w-25 py-2 text-center transition-all duration-200 border group ${hasJoined ? 'cursor-pointer text-white bg-[#EF4444] border-[#EF4444]' : canJoin && !isJoining && isRegistrationOpen ? 'cursor-pointer bg-[#6B58D6] hover:bg-[#6B58D6]/80 border-[#2C292A] text-white' : 'bg-[#EF4444]/10 border-[#EF4444]/30 text-[#EF4444] cursor-not-allowed'}`}
+                        >
                             {hasJoined
                                 ? <div>
                                     <span className="">Leave</span>
@@ -177,7 +234,10 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                     </div>
                 </div>
 
-                <div onClick={hasJoined ? leaveTournament : canJoin && !isJoining && isRegistrationOpen ? joinTournament : undefined} className={`md:flex hidden items-center justify-center rounded-[10px] text-xl font-semibold w-40 py-3 text-center transition-all duration-200 border group ${hasJoined ? 'cursor-pointer bg-green-500/20 border-green-500/30 text-green-400 hover:bg-[#EF4444] hover:border-[#EF4444] hover:text-white' : canJoin && !isJoining && isRegistrationOpen ? 'cursor-pointer bg-[#6B58D6] hover:bg-[#6B58D6]/80 border-[#2C292A] text-white' : 'bg-[#EF4444]/10 border-[#EF4444]/30 text-[#EF4444] cursor-not-allowed'}`} >
+                <div
+                    onClick={hasJoined ? leaveTournament : openJoinPopup}
+                    className={`md:flex hidden items-center justify-center rounded-[10px] text-xl font-semibold w-40 py-3 text-center transition-all duration-200 border group ${hasJoined ? 'cursor-pointer bg-green-500/20 border-green-500/30 text-green-400 hover:bg-[#EF4444] hover:border-[#EF4444] hover:text-white' : canJoin && !isJoining && isRegistrationOpen ? 'cursor-pointer bg-[#6B58D6] hover:bg-[#6B58D6]/80 border-[#2C292A] text-white' : 'bg-[#EF4444]/10 border-[#EF4444]/30 text-[#EF4444] cursor-not-allowed'}`}
+                >
                     {hasJoined
                         ? <div>
                             <span className="group-hover:hidden">Joined</span>
@@ -205,7 +265,7 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                             </div>
                             <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
                                 <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Per Kill</p>
-                                <p className="text-2xl font-semibold">₹{tournamentDetails.entryFee}</p>
+                                <p className="text-2xl font-semibold">₹{tournamentDetails.perKill}</p>
                             </div>
                             <div className="flex flex-col items-center gap-0 bg-[#0A0C0F] px-4 py-6 md:py-10 text-center">
                                 <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Prize Pool</p>
@@ -297,6 +357,68 @@ export default function TournamentDetailsUI({ tournamentDetails, user, tournamen
                     </div>
                 )}
             </div>
+
+            {/* Join Popup */}
+            {joinPopUp && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+                    <div className="w-full max-w-md rounded-2xl border border-[#2C292A] bg-[#16161C] p-5 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-white">Confirm your details</h2>
+                            <button onClick={closeJoinPopup} className="rounded-lg p-1 text-[#9A9AA3] hover:text-white cursor-pointer">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+                        <p className="mt-1 text-sm text-[#9A9AA3]">
+                            This info is used to verify you when the room is created. Make sure it matches your in-game profile exactly.
+                        </p>
+
+                        <div className="mt-5 flex flex-col gap-4">
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-xs uppercase tracking-wide text-[#6C6D73]">In-Game Name</label>
+                                <input
+                                    type="text"
+                                    value={inGameName}
+                                    onChange={(e) => setInGameName(e.target.value)}
+                                    placeholder="e.g. ProGamer_07"
+                                    className="rounded-lg border border-[#2C292A] bg-[#0A0C0F] px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#6B58D6]"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-xs uppercase tracking-wide text-[#6C6D73]">In-Game ID</label>
+                                <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={inGameId}
+                                    onChange={(e) => setInGameId(e.target.value)}
+                                    placeholder="e.g. 123456789"
+                                    className="rounded-lg border border-[#2C292A] bg-[#0A0C0F] px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#6B58D6]"
+                                />
+                            </div>
+
+                            {formError && (
+                                <p className="text-sm text-[#EF4444]">{formError}</p>
+                            )}
+
+                            <div className="mt-2 flex items-center gap-3">
+                                <button
+                                    onClick={closeJoinPopup}
+                                    disabled={isJoining}
+                                    className="flex-1 rounded-[10px] border border-[#2C292A] py-2.5 text-sm font-medium text-[#C8C8D0] hover:bg-[#202126] disabled:opacity-50 cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={joinTournament}
+                                    disabled={isJoining}
+                                    className="flex-1 rounded-[10px] bg-[#6B58D6] py-2.5 text-sm font-semibold text-white hover:bg-[#6B58D6]/80 disabled:opacity-50 cursor-pointer"
+                                >
+                                    {isJoining ? "Joining..." : "Confirm & Join"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

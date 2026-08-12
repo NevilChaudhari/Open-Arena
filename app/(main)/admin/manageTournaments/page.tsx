@@ -24,7 +24,9 @@ export default async function addGames() {
 
     const { data: tournamentPlayers } = await supabase
         .from("tournamentPlayers")
-        .select("*");
+        .select("*, users(*)");
+
+        console.table(tournamentPlayers)
 
     if (!games || gamesError) console.log(`Add Tournament getGames error: ${gamesError}`)
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, ChevronRight, ChevronUp, Gamepad2, ListFilterPlus, PenLine, Plus, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp, Gamepad2, ListFilterPlus, PenLine, Plus, Trash2, X, Users, UserMinus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
@@ -22,8 +22,19 @@ interface Tournaments {
     roomPassword?: string,
 }
 
+interface PlayerUser {
+    id: string,
+    username: string,
+    coins: number,
+}
+
 interface TournamentPlayers {
+    id: number,
     tournamentId: number,
+    playerId: string,
+    inGameName?: string,
+    inGameId?: string,
+    users: PlayerUser,
 }
 
 interface Props {
@@ -72,6 +83,11 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
     const [openEditModeDropdown, setOpenEditModeDropdown] = useState(false);
     const [openEditMapDropdown, setOpenEditMapDropdown] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+
+    // New: player management modal
+    const [playersTournament, setPlayersTournament] = useState<Tournaments | null>(null);
+    const [removingPlayerId, setRemovingPlayerId] = useState<number | null>(null);
+    const [playersError, setPlayersError] = useState("");
 
     const isRegistrationOpen = (tournament: Tournaments) => new Date(tournament.registrationEnds) > new Date();
 
@@ -142,6 +158,52 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
         setDeletingId(null);
         router.refresh();
     };
+
+    // New: player management
+    const openPlayersModal = (tournament: Tournaments) => {
+        setPlayersError("");
+        setPlayersTournament(tournament);
+    };
+
+    const closePlayersModal = () => {
+        setPlayersTournament(null);
+        setPlayersError("");
+    };
+
+    const removePlayer = async (player: TournamentPlayers, entryFee: string) => {
+        if (!confirm(`Remove ${player.users.username} from this tournament? Their entry fee will be refunded.`)) return;
+
+        setRemovingPlayerId(player.id);
+        setPlayersError("");
+
+        try {
+            const res = await fetch('/api/tournament/leave', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tournamentId: player.tournamentId,
+                    playerId: player.playerId,
+                    coins: (player.users.coins + Number(entryFee || 0)),
+                }),
+            });
+
+            const data = await res.json();
+            if (data.error) {
+                console.log(`remove player error: ${data.error}`);
+                setPlayersError(data.error);
+                return;
+            }
+
+            router.refresh();
+        } catch (err) {
+            console.log(`remove player error: ${err}`);
+            setPlayersError("Something went wrong removing this player.");
+        } finally {
+            setRemovingPlayerId(null);
+        }
+    };
+
+    const playersFor = (tournamentId: number) => tournamentPlayers.filter((p) => p.tournamentId === tournamentId);
 
     return (
         <div className="flex flex-col w-full h-full gap-5 overflow-hidden">
@@ -281,6 +343,66 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
                 </div>
             )}
 
+            {/* Manage Players Popup */}
+            {playersTournament && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col rounded-xl border border-[#2C292A] bg-[#0A0C0F] p-6 shadow-xl">
+
+                        {/* Header */}
+                        <div className="mb-1 flex items-center justify-between">
+                            <div>
+                                <h2 className="text-2xl font-bold">Registered Players</h2>
+                                <p className="text-sm text-[#9A9AA3]">{playersTournament.name}</p>
+                            </div>
+                            <div onClick={closePlayersModal} className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-md text-[#7E8190] hover:bg-[#1A1C20] hover:text-white">
+                                <X size={18} />
+                            </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between text-sm text-[#9A9AA3]">
+                            <span><span className="text-[#22C55E]">{playersFor(playersTournament.id).length}</span> / {playersTournament.maxPlayers} joined</span>
+                            {playersError && <span className="text-[#EF4444]">{playersError}</span>}
+                        </div>
+
+                        <div className="mt-4 flex-1 overflow-y-auto pr-1">
+                            {playersFor(playersTournament.id).length === 0 ? (
+                                <div className="flex h-32 items-center justify-center text-sm text-[#6C6D73]">
+                                    No players have joined yet.
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-2">
+                                    {playersFor(playersTournament.id).map((player, i) => (
+                                        <div key={player.id} className="flex items-center gap-3 rounded-lg border border-[#2C292A] bg-[#111217] px-3.5 py-3">
+                                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#6B58D6]/15 font-['Rajdhani'] text-xs font-bold text-[#A79FFF]">
+                                                {player.users.username.slice(0, 2).toUpperCase()}
+                                            </div>
+
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium text-white">{player.users.username}</p>
+                                                <p className="truncate text-xs text-[#6C6D73]">
+                                                    {player.inGameName ? `IGN: ${player.inGameName}` : "IGN not set"}
+                                                    {player.inGameId ? ` · ID: ${player.inGameId}` : ""}
+                                                </p>
+                                            </div>
+
+                                            <span className="hidden shrink-0 font-['Rajdhani'] text-xs text-[#6C6D73] sm:block">#{String(i + 1).padStart(2, "0")}</span>
+
+                                            <div
+                                                onClick={() => removePlayer(player, playersTournament.entryFee)}
+                                                className={`flex shrink-0 items-center gap-1.5 cursor-pointer rounded-lg border border-[#3F3E41] px-3 py-1.5 text-xs font-medium text-[#9A9AA3] hover:bg-[#EF4444]/20 hover:text-[#EF4444] hover:border-[#EF4444] ${removingPlayerId === player.id ? "opacity-50 pointer-events-none" : ""}`}
+                                            >
+                                                <UserMinus size={14} />
+                                                {removingPlayerId === player.id ? "Removing..." : "Remove"}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="flex w-full h-screen flex-col gap-6 md:gap-10 overflow-y-auto scrollbar-none">
 
                 {/* Header */}
@@ -375,7 +497,14 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
 
                                         {/* Registration */}
                                         <td className="px-3 py-3 lg:px-5 lg:py-4 text-[#9A9AA3]">
-                                            <span className="text-[#22C55E]">{tournamentPlayers.filter((t) => t.tournamentId === tournament.id).length}</span> / {tournament.maxPlayers}
+                                            <div
+                                                onClick={() => openPlayersModal(tournament)}
+                                                className="inline-flex cursor-pointer items-center gap-1.5 rounded-md hover:bg-[#6B58D6]/10 px-2 py-1 -mx-2"
+                                                title="Manage players"
+                                            >
+                                                <span className="text-[#22C55E]">{playersFor(tournament.id).length}</span> / {tournament.maxPlayers}
+                                                <Users size={14} className="text-[#7E8190]" />
+                                            </div>
                                         </td>
 
                                         {/* Entry Fee */}
@@ -391,6 +520,9 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
                                         {/* Actions */}
                                         <td className="px-3 py-3 lg:px-5 lg:py-4">
                                             <div className="flex items-center justify-end gap-2">
+                                                <div onClick={() => openPlayersModal(tournament)} className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#6B58D6]/20 hover:text-[#A79FFF] hover:border-[#6B58D6]" title="Players">
+                                                    <Users size={16} />
+                                                </div>
                                                 <div onClick={() => router.push(`/tournaments/${tournament.id}`)} className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-[#3F3E41] text-[#9A9AA3] hover:bg-[#1C1D23] hover:text-white" title="View">
                                                     <ChevronRight size={18} />
                                                 </div>
@@ -447,6 +579,14 @@ export default function ManageTournamentUI({ tournaments, tournamentPlayers }: P
                                         <p className="text-[10px] md:text-xs uppercase tracking-wide text-[#6C6D73]">Entry Fee</p>
                                         <p className="text-xl font-semibold">₹{tournament.entryFee}</p>
                                     </div>
+                                </div>
+
+                                <div
+                                    onClick={() => openPlayersModal(tournament)}
+                                    className="flex items-center justify-center gap-2 h-10 rounded-md border border-[#2C292A] bg-[#0A0C0F] cursor-pointer text-sm text-[#9A9AA3]"
+                                >
+                                    <Users size={14} />
+                                    <span className="text-[#22C55E]">{playersFor(tournament.id).length}</span> / {tournament.maxPlayers} players
                                 </div>
 
                                 {/* Admin actions */}

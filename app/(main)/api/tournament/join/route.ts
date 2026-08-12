@@ -4,11 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(req: Request) {
     const supabase = await createClient();
 
-    const { playerId, tournamentId } = await req.json()
+    const { playerId, tournamentId, inGameName, inGameId } = await req.json()
 
     const { error } = await supabase.from('tournamentPlayers').insert({
         playerId: playerId,
         tournamentId: tournamentId,
+        inGameName: inGameName,
+        inGameId: inGameId,
     });
 
     if (error) {
